@@ -8,6 +8,8 @@ frontend-build:
   type: deploy
   stage: frontend-build
   image: ruby:latest
+  only:
+    - development
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
@@ -16,6 +18,8 @@ frontend-build:
 
 frontend-test:
   stage: frontend-test
+  only:
+    - development
   script: 
     - npm install
     - npm test
