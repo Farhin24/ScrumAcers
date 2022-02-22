@@ -1,9 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
+import StandUpForm from './StandUpForm';
+import StandUpFormView from './StandUpFormView'
 
 function App() {
   return (
-    <div className="App">
+    <Router>
+      <div className="App">
+      <Switch>
+      <Route exact path= "/">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -18,7 +24,16 @@ function App() {
           Learn React
         </a>
       </header>
+      </Route>
+      <Route exact path="/StandUpForm">
+          <StandUpForm/>
+      </Route>
+      <Route exact path="/StandUpFormView">
+          <StandUpFormView/>
+      </Route>
+      </Switch>
     </div>
+    </Router>
   );
 }
 
