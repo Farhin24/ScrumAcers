@@ -1,30 +1,27 @@
-import logo from './logo.svg';
+import React,{useState} from "react";
 import './App.css';
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import StandUpForm from './StandUpForm';
 import StandUpFormView from './StandUpFormView'
+import Loginform from "./components/login";
+import Header from './components/Header'
 
 function App() {
+  const [email,setemail] = useState("");
+ 
   return (
+    
     <Router>
       <div className="App">
+      <Header/>
       <Switch>
       <Route exact path= "/">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Loginform email={email} setemail={setemail}/>
       </Route>
+      <Route exact
+            path="/"> 
+            <Loginform />
+          </Route>
       <Route exact path="/StandUpForm">
           <StandUpForm/>
       </Route>
