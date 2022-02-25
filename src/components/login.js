@@ -95,7 +95,7 @@ return errormsgs
 						
 						<TextField fullWidth type="email" name="email" label='Email' placeholder="Enter your email" value={fvalues.email} onChange={changevalue}/>
 						<p style={pstyle}>{ferrors.email}</p>
-						<TextField fullWidth type="password" name="password" label='Password' placeholder="Set a password" value={fvalues.password} onChange={changevalue}/>
+						<TextField fullWidth type="password" name="password" label='Password' placeholder="Enter your password" value={fvalues.password} onChange={changevalue}/>
 						<p style={pstyle}>{ferrors.password}</p>
 					
 						<Button style={buttonstyle} type='submit' variant='contained' >Submit</Button>
