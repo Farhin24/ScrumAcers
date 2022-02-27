@@ -24,7 +24,7 @@ const StandUpForm = () => {
           boxShadow: 1,
           borderRadius: 2,
           p: 5,
-          mt: 10,
+          mt: 5,
           minWidth: 300,
           height: maxHeight,
           display: 'inline-block'

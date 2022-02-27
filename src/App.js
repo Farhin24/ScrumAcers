@@ -5,6 +5,7 @@ import StandUpForm from './StandUpForm';
 import StandUpFormView from './StandUpFormView'
 import Loginform from "./components/login";
 import Header from './components/Header'
+import Leaves from "./components/Leaves";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   return (
     
     <Router>
+      <div className="App">
       <Header/>
       <Switch>
       <Route exact path= "/">
@@ -28,7 +30,11 @@ function App() {
       <Route exact path="/StandUpFormView">
           <StandUpFormView/>
       </Route>
+      <Route exact path="/Leaves">
+          <Leaves/>
+      </Route>
       </Switch>
+      </div>
     </Router>
   );
 }
