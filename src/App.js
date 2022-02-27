@@ -6,13 +6,13 @@ import StandUpFormView from './StandUpFormView'
 import Loginform from "./components/login";
 import Header from './components/Header'
 
+
 function App() {
   const [email,setemail] = useState("");
  
   return (
     
     <Router>
-      <div className="App">
       <Header/>
       <Switch>
       <Route exact path= "/">
@@ -29,7 +29,6 @@ function App() {
           <StandUpFormView/>
       </Route>
       </Switch>
-    </div>
     </Router>
   );
 }

@@ -1,6 +1,8 @@
 import React from 'react'
 import {Grid,Paper,TextField,Button} from '@material-ui/core'
 import {useState,useEffect} from 'react'
+import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 const Loginform = (props) =>
 
@@ -13,6 +15,8 @@ const pstyle={color:'red'}
 const firstval={email:"",password:""}
 const [fvalues,setV]=useState(firstval)
 const [submitinit,setSubmitStatus]=useState(false)
+const [isLoading, setIsLoading] = useState(false);
+const navigator=useHistory()
 
 const errormsgs={}
 
@@ -36,6 +40,20 @@ var len = Object.keys(errormsgs).length;
 if(len==0){
 setSubmitStatus(true);
 }
+setIsLoading(true);
+axios
+  .post("https://scrum-acers-backend.herokuapp.com/api/user/login", {
+	...fvalues,
+  })
+  .then((res) => {
+	  console.table(res);
+	setIsLoading(false);
+	navigator.push("/StandUpForm");
+  })
+  .catch((error) => {
+	setIsLoading(false);
+	console.log(error);
+  });
 }}
 
 
@@ -73,17 +91,18 @@ if(!vals.password){
 	errormsgs.password="Password is required!";
 }
 
-else if(vals.password.length<8){
-	errormsgs.password="Please enter a password having atleast 8 characters"
+else if(vals.password.length<10){
+	errormsgs.password="Please enter a password having atleast 10 characters"
 }
-else if(vals.password.length>8){
-	errormsgs.p1="Please enter a password having less than 8 characters"
+else if(vals.password.length>10){
+	errormsgs.password="Please enter a password having less than 10 characters"
 }
 
 return errormsgs
 }
 
 	return(
+		
 		<>
 	
 			<Grid>
