@@ -122,7 +122,7 @@ class Leaves extends React.Component {
     }
     axios
       .get(
-        "http://localhost:4000/api/user/leavesInformation",
+        "https://scrum-acers-backend.herokuapp.com/api/user/leavesInformation",
         {
           headers: {
             Authorization: `${token}`,
@@ -184,7 +184,7 @@ class Leaves extends React.Component {
       
       axios
         .get(
-          "http://localhost:4000/api/user/leavesInformation",
+          "https://scrum-acers-backend.herokuapp.com/api/user/leavesInformation",
           {
             headers: {
               Authorization: `${token}`,
@@ -335,7 +335,7 @@ class Leaves extends React.Component {
     };
     axios
       .post(
-        "http://localhost:4000/api/user/leaveRequest",
+        "https://scrum-acers-backend.herokuapp.com/api/user/leaveRequest",
         data,
         {
           headers: {
