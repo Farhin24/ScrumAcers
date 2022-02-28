@@ -8,7 +8,7 @@
       ". Yesterday Yesterday Yesterday ."
       ". Today Today Today ."
       ". Blockers Blockers Blockers ."
-      ". submit . reset .";
+      ". . submit . .";
   }
   
   .Title { grid-area: Title; }
@@ -51,9 +51,9 @@
     gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
-      ". . ."
-      "blabel bradio ."
-      ". . .";
+      ". bradio bradio"
+      "blabel bradio bradio"
+      ". bradio bradio";
     grid-area: Blockers;
   }
   
@@ -68,26 +68,16 @@
     grid-auto-flow: row;
     grid-template-areas:
       ". . ."
-      ". . sbutton"
+      "sbutton rbutton ."
       ". . .";
     grid-area: submit;
+    display: flex;
+    justify-content: center;
+    margin-top: 5ch;
   }
   
-  .sbutton { grid-area: sbutton; justify-content: flex-end;}
-  
-  .reset {  display: grid;
-    grid-template-columns: auto auto auto;
-    grid-template-rows: auto auto auto;
-    gap: 0px 0px;
-    grid-auto-flow: row;
-    grid-template-areas:
-      ". . ."
-      ". . rbutton"
-      ". . .";
-    grid-area: reset;
-  }
-  
-  .rbutton { grid-area: rbutton; justify-content: flex-end;}
+  .sbutton { grid-area: sbutton; justify-self: flex-start;}
+  .rbutton { grid-area: rbutton; justify-self: flex-end; margin-left: 20ch;}
   body{
       background-color: #b0bec5;
   }  

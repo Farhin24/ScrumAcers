@@ -1,10 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { FormLabel } from '@mui/material';
 import { maxHeight } from '@mui/system';
 import './StandUpForm.css';
@@ -14,9 +10,38 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
 
+
+var defaultValues = {
+  yesterday_goals:"",
+  today_goals:"",
+  challenges_faced: "",
+};
 
 const StandUpForm = () => {
+  const [formValues, setFormValues] = useState(defaultValues);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(formValues);
+  };
+
+  const handleReset = () => {
+    setFormValues({
+      ...defaultValues,
+    })
+  };
+
+
     return (  
         <Box
         sx={{
@@ -31,24 +56,35 @@ const StandUpForm = () => {
         }}
       >
         <div class="container">
-        
         <div class="Title">
         <Typography variant="h2" gutterBottom component="div">
             Daily Stand-Up Form
-      </Typography>
+        </Typography>
         </div>
         <div class="Yesterday">
           <div class="Ylabel"><FormLabel>Yesterday's goals</FormLabel></div>
           <div class="Ytext">
+
             <Box
              sx={{
                  '& .MuiTextField-root': { m: 1, width: '80ch' },
+
                }}
              component="form"
              noValidate
              autoComplete="off"
             >
-                <TextField multiline rows={8} id="outlined-basic" label="Please put Yesterday's Goals achieved" variant="outlined" />
+                <TextField 
+                required 
+                multiline 
+                rows={8} 
+                id="outlined-basic" 
+                label="Please put Yesterday's Goals achieved" 
+                variant="outlined" 
+                name = "yesterday_goals"
+                value={formValues.yesterday_goals}
+                onChange={handleInputChange}
+              />
             </Box>
           </div>
         </div>
@@ -63,47 +99,57 @@ const StandUpForm = () => {
              noValidate
              autoComplete="off"
             >
-                <TextField multiline rows={8} id="outlined-textarea" label="Please put your Todays's goals" variant="outlined" />
-            </Box></div>
+                <TextField 
+                required 
+                multiline 
+                rows={8} 
+                id="outlined-textarea" 
+                label="Please put your Todays's goals" 
+                variant="outlined"
+                name = "today_goals"
+                value={formValues.today_goals}
+                onChange={handleInputChange} />
+            </Box>
+            </div>
         </div>
         <div class="Blockers">
-          <div class="blabel"></div>
+          <div class="blabel"><FormLabel>Challenges Faced</FormLabel></div>
           <div class="bradio">
-            <Box component = 'form' >
-            <FormControl variant="filled" sx={{ m: 1, width: '30ch' }}>
-                <InputLabel id="demo-simple-select-standard-label">Number of Blockers</InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  //value={blockers}
-                  //onChange={handleChange}
-                  label="Age"
-                >
-
-              <MenuItem value={0}>None</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-              <MenuItem value={4}>4</MenuItem>
-              <MenuItem value={5}>5</MenuItem>
-            </Select>
-            </FormControl>
+            <Box
+             sx={{
+                 '& .MuiTextField-root': { m: 1, width: '80ch' },
+               }}
+             component="form"
+             noValidate
+             autoComplete="off"
+            >
+                <TextField 
+                required 
+                multiline 
+                rows={8} 
+                id="outlined-basic" 
+                label="Please put any problems or challenges faced" 
+                variant="outlined"
+                name = "challenges_faced"
+                value={formValues.challenges_faced}
+                onChange={handleInputChange} 
+                />
             </Box>
           </div>
         </div>
         <div class="submit">
           <div class="sbutton">
-          <Button variant="contained">Submit</Button>
+          <Button variant="contained" onClick={handleSubmit}>Submit</Button>
           </div>
         </div>
-        <div class="reset">
+        <div class="submit">
           <div class="rbutton">
-          <Button variant="contained" >Reset</Button>
+          <Button variant="contained" onClick={handleReset} >Reset</Button>
           </div>
         </div>
       </div>
       </Box>
-    );
-}
- 
+    );   
+};
+
 export default StandUpForm;
