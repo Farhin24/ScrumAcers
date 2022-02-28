@@ -11,13 +11,25 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
+import axios from 'axios'
+import Stack from '@mui/material/Stack';
+//import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { useEffect } from 'react';
+
 
 
 var defaultValues = {
-  yesterday_goals:"",
-  today_goals:"",
-  challenges_faced: "",
+  q1:"",
+  q2:"",
+  q3:"",
 };
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 
 const StandUpForm = () => {
   const [formValues, setFormValues] = useState(defaultValues);
@@ -28,12 +40,94 @@ const StandUpForm = () => {
       [name]: value,
     });
   };
+  
+  const [open, setOpen] = React.useState(false);
+  const[openerr,setOpenerr] = React.useState(false);
+  const[formstatus,setFormStatus] = React.useState(true);
+  const[message,setMessage] = React.useState("");
+  //const[formData,setFormData] = React.useState(formData)
 
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(formValues);
+  const handleClickerr =() =>{
+      setOpenerr(true);
   };
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  //const[rows,setRowValues] = useState(rows);
+  useEffect(() =>{
+    getRowValues();
+  });
+
+  const getRowValues = () => {
+    let temp=JSON.parse(localStorage.getItem("LoginData"));
+    let token = "Bearer " + temp.token;
+        axios
+          .get(
+            "https://scrum-acers-backend.herokuapp.com/api/user/fetchStandUpForm",
+            {
+              headers: {
+                Authorization: `${token}`,
+              }
+            }
+          )
+          .then((res) => {
+            console.log({ rows: res.data.data });
+            console.log(res.data)
+            if(res.data.data.length>0){
+              setFormStatus(true);
+              setMessage("");
+            }
+            else{
+              setFormStatus(false);
+              setMessage(res.data.message);
+              
+            }
+          })
+          .catch((err) => {
+            console.log({ errorMessage: err.response.data.message });
+          });
+  };
+
+  const setRowValues = (event) => {
+    event.preventDefault();
+    let temp=JSON.parse(localStorage.getItem("LoginData"));
+    let data = {
+       ...formValues
+    };
+    let token = "Bearer " + temp.token;
+    console.log(JSON.stringify(temp));
+    console.log(JSON.stringify(data));
+        axios
+          .post(
+            "https://scrum-acers-backend.herokuapp.com/api/user/dailyStandUpForm",
+            formValues,
+            {
+              headers: {
+                Authorization: `${token}`,
+              }
+            }
+          )
+          .then((res) => {
+            console.log({ rows: res.data.data });
+            handleReset();
+            handleClick();
+          })
+          .catch((err) => {
+            console.log({ errorMessage: err.response.data.message });
+            handleClickerr();
+          });
+  };
+  
 
   const handleReset = () => {
     setFormValues({
@@ -42,8 +136,25 @@ const StandUpForm = () => {
   };
 
 
+
     return (  
+        formstatus?
         <Box
+        sx={{
+          bgcolor: 'background.paper',
+          boxShadow: 1,
+          borderRadius: 2,
+          p: 5,
+          mt: 5,
+          minWidth: 300,
+          height: maxHeight,
+          display: 'inline-block'
+        }}
+    ><Typography variant="h5" gutterBottom component="div">
+      Form is already submitted for today
+      </Typography></Box>
+        :
+          <Box
         sx={{
           bgcolor: 'background.paper',
           boxShadow: 1,
@@ -81,8 +192,8 @@ const StandUpForm = () => {
                 id="outlined-basic" 
                 label="Please put Yesterday's Goals achieved" 
                 variant="outlined" 
-                name = "yesterday_goals"
-                value={formValues.yesterday_goals}
+                name = "q1"
+                value={formValues.q1}
                 onChange={handleInputChange}
               />
             </Box>
@@ -106,8 +217,8 @@ const StandUpForm = () => {
                 id="outlined-textarea" 
                 label="Please put your Todays's goals" 
                 variant="outlined"
-                name = "today_goals"
-                value={formValues.today_goals}
+                name = "q2"
+                value={formValues.q2}
                 onChange={handleInputChange} />
             </Box>
             </div>
@@ -130,8 +241,8 @@ const StandUpForm = () => {
                 id="outlined-basic" 
                 label="Please put any problems or challenges faced" 
                 variant="outlined"
-                name = "challenges_faced"
-                value={formValues.challenges_faced}
+                name = "q3"
+                value={formValues.q3}
                 onChange={handleInputChange} 
                 />
             </Box>
@@ -139,15 +250,35 @@ const StandUpForm = () => {
         </div>
         <div class="submit">
           <div class="sbutton">
-          <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+          <Button variant="contained" onClick={setRowValues}>Submit</Button>
           </div>
         </div>
         <div class="submit">
           <div class="rbutton">
-          <Button variant="contained" onClick={handleReset} >Reset</Button>
+          <Button variant="contained" onClick={handleReset}>Reset</Button>
           </div>
         </div>
       </div>
+      <Stack spacing={2} sx={{ width: '100%' }}>
+    {/* <Button variant="outlined" onClick={handleClick}>
+        Open success snackbar
+      </Button> */}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Form submitted Successfully!
+        </Alert>
+      </Snackbar>
+    </Stack>
+    <Stack spacing={2} sx={{ width: '100%' }}>
+    {/* <Button variant="outlined" onClick={handleClick}>
+        Open success snackbar
+      </Button> */}
+      <Snackbar open={openerr} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          Error cannot submit form more than once!
+        </Alert>
+      </Snackbar>
+    </Stack>
       </Box>
     );   
 };
