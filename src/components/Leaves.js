@@ -16,6 +16,9 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Grid, TextField } from "@material-ui/core";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -80,12 +83,43 @@ class Leaves extends React.Component {
       loader: false,
       rows: [],
       errorMessage: "",
+      employee_id: "",
+      manager_id: "",
+      manager_email_id: "",
+      leaveDesc: "",
+      startDate: "",
+      endDate: "",
+      leaveDescError: "",
+      dateError: "",
+      successMessage:""
     };
   }
 
   componentDidMount() {
-    let token = "Bearer " + JSON.parse(localStorage.getItem("LoginData")).token;
-    console.log(token);
+    let date = new Date();
+    let date2 = new Date();
+    date2.setDate(date2.getDate() + 1);
+    let sDate = date.toISOString().split("T")[0];
+    let eDate = date2.toISOString().split("T")[0];
+    this.setState({
+      employee_id: "",
+      manager_id: "",
+      manager_email_id: "",
+      leaveDesc: "",
+      startDate: sDate,
+      endDate: eDate,
+      leaveDescError: "",
+      dateError: "",
+      successMessage:""
+    });
+    let token = "";
+    try {
+      let data = JSON.parse(localStorage.getItem("LoginData"));
+      token = "Bearer " + data.token;
+      this.setState({ employee_id: data.data[0].emp_id });
+    } catch {
+      token = "";
+    }
     axios
       .get(
         "https://scrum-acers-backend.herokuapp.com/api/user/leavesInformation",
@@ -96,7 +130,10 @@ class Leaves extends React.Component {
         }
       )
       .then((res) => {
-        console.log(res);
+        this.setState({
+          manager_id: res.data.data[0].team_leader_emp_id,
+          manager_email_id: res.data.data[0].email,
+        });
       })
       .catch((err) => {
         this.setState({ errorMessage: err.response.data.message });
@@ -115,20 +152,36 @@ class Leaves extends React.Component {
         }
       )
       .then((res) => {
-        console.log(res.data.data);
         this.setState({ rows: res.data.data });
       })
       .catch((err) => {
-        console.log(err.response.data);
         this.setState({ errorMessage: err.response.data.message });
       });
   }
 
   handleChange = (e) => {
-    let token = "Bearer " + JSON.parse(localStorage.getItem("LoginData")).token;
+    let LoginData=JSON.parse(localStorage.getItem("LoginData"))
+    let token = "Bearer " + LoginData.token;
     let tabNum = parseInt(e.target.id.at(-1));
     this.setState({ value: tabNum, loader: true, rows: [], errorMessage: "" });
     if (tabNum === 0) {
+      let date = new Date();
+      let date2 = new Date();
+      date2.setDate(date2.getDate() + 1);
+      let sDate = date.toISOString().split("T")[0];
+      let eDate = date2.toISOString().split("T")[0];
+      this.setState({
+        employee_id: LoginData.data[0].emp_id,
+        manager_id: "",
+        manager_email_id: "",
+        leaveDesc: "",
+        startDate: sDate,
+        endDate: eDate,
+        leaveDescError: "",
+        dateError: "",
+        successMessage:""
+      });
+      
       axios
         .get(
           "https://scrum-acers-backend.herokuapp.com/api/user/leavesInformation",
@@ -139,10 +192,12 @@ class Leaves extends React.Component {
           }
         )
         .then((res) => {
-          console.log(res.data);
+          this.setState({
+            manager_id: res.data.data[0].team_leader_emp_id,
+            manager_email_id: res.data.data[0].email,
+          });
         })
         .catch((err) => {
-          console.log(err.response.data);
           this.setState({ errorMessage: err.response.data.message });
         });
     } else if (tabNum === 1) {
@@ -156,11 +211,9 @@ class Leaves extends React.Component {
           }
         )
         .then((res) => {
-          console.log(res.data.data);
           this.setState({ rows: res.data.data });
         })
         .catch((err) => {
-          console.log(err.response.data);
           this.setState({ errorMessage: err.response.data.message });
         });
     } else if (tabNum === 2) {
@@ -177,13 +230,13 @@ class Leaves extends React.Component {
           this.setState({ rows: res.data.data });
         })
         .catch((err) => {
-          console.log(err.response.data);
           this.setState({ errorMessage: err.response.data.message });
         });
     }
   };
 
   onSubmitClick = (row, status) => {
+    let token = "Bearer " + JSON.parse(localStorage.getItem("LoginData")).token;
     let data = {
       employee_id: row.employee_id,
       leaveId: row.leave_id,
@@ -197,8 +250,7 @@ class Leaves extends React.Component {
         data,
         {
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN1bHQiOnsiZW1wX2lkIjoxfSwiaWF0IjoxNjQ1OTE5NzUzLCJleHAiOjE2NDU5NTU3NTN9.JP4FfYfXvW85l0TYEUtOW5A06K6ETjLKdiTsKmNrwnE",
+            Authorization: `${token}`,
           },
         }
       )
@@ -211,6 +263,100 @@ class Leaves extends React.Component {
       })
       .catch((err) => {
         console.log(err.response);
+        this.setState({ errorMessage: err.response.data.message });
+      });
+  };
+
+  newpaperstyle = {
+    margin: "30px auto",
+    width: 400,
+    padding: "20px 20px",
+  };
+
+  pstyle = { color: "red" };
+
+  successStyle = { color: "green" };
+
+  onChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+    this.validateField(event.target.name, event.target.value);
+  };
+
+  validateField = (fieldName, value) => {
+    var message;
+    let date;
+    let date2;
+
+    switch (fieldName) {
+      case "leaveDesc":
+        let regex = new RegExp(/^[A-z][A-z0-9 ]{4,}$/);
+        value === ""
+          ? (message = "Leave Description cannot be empty")
+          : regex.test(value)
+          ? (message = "")
+          : (message =
+              "Leave description should have more than 4 characters and no special characters");
+        this.setState({ leaveDescError: message });
+        break;
+
+      case "startDate":
+        date = new Date(value.replaceAll("-", "/"));
+        date2 = new Date(this.state.endDate.replaceAll("-", "/"));
+        date2 < date
+          ? (message = "Start Date cannot be greater than End Date")
+          : (message = "");
+        this.setState({ dateError: message });
+        break;
+
+      case "endDate":
+        date = new Date(value.replaceAll("-", "/"));
+        date2 = new Date(this.state.startDate.replaceAll("-", "/"));
+        date < date2
+          ? (message = "Start Date cannot be greater than End Date")
+          : (message = "");
+        this.setState({ dateError: message });
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  leaveRequest = (e) => {
+    e.preventDefault();
+    let d = JSON.parse(localStorage.getItem("LoginData"));
+    let token = "Bearer " + d.token;
+    let data = {
+      emp_id: d.data[0].emp_id,
+      manager_id: this.state.manager_id,
+      leaveDesc: this.state.leaveDesc,
+      start_date: this.state.startDate,
+      end_date: this.state.endDate,
+    };
+    axios
+      .post(
+        "https://scrum-acers-backend.herokuapp.com/api/user/leaveRequest",
+        data,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        toast("Leave Request Raised", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        this.setState({
+          leaveDesc: "",
+          startDate: "",
+          endDate: "",
+          leaveDescError: "",
+          dateError: "",
+          successMessage:"Leave Request Raised Successfully"
+        });
+      })
+      .catch((err) => {
         this.setState({ errorMessage: err.response.data.message });
       });
   };
@@ -257,9 +403,104 @@ class Leaves extends React.Component {
           </Tabs>
         </Box>
         <TabPanel value={this.state.value} index={0} loader={true}>
-          {this.state.errorMessage !== ""
-            ? this.state.errorMessage
-            : "Item One"}
+          {this.state.errorMessage !== "" ? (
+            this.state.errorMessage
+          ) : (
+            <Grid>
+              <Paper elevation={15} style={this.newpaperstyle}>
+                <Grid>
+                  <h2>Leave Request Form</h2>
+                </Grid>
+                <form onSubmit={this.leaveRequest}>
+                  <TextField
+                    fullWidth
+                    type="text"
+                    name="empId"
+                    label="Employee ID"
+                    placeholder=""
+                    value={this.state.employee_id}
+                    disabled
+                  />
+                  <TextField
+                    fullWidth
+                    type="text"
+                    name="managerId"
+                    label="Manager Email ID"
+                    placeholder=""
+                    value={this.state.manager_email_id}
+                    disabled
+                  />
+                  <TextField
+                    fullWidth
+                    type="text"
+                    name="leaveDesc"
+                    label="Leave description"
+                    placeholder="Enter description"
+                    value={this.state.leaveDesc}
+                    onChange={this.onChange}
+                  />
+                  {this.state.leaveDescError !== "" ? (
+                    <p style={this.pstyle}>{this.state.leaveDescError}</p>
+                  ) : (
+                    ""
+                  )}
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <Grid spacing={8} container>
+                      <Grid item>
+                        <TextField
+                          id="date"
+                          label="Leave From Date"
+                          name="startDate"
+                          type="date"
+                          defaultValue={this.state.startDate}
+                          onChange={this.onChange}
+                          sx={{ width: 220 }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          id="date"
+                          label="Leave To Date"
+                          name="endDate"
+                          type="date"
+                          onChange={this.onChange}
+                          defaultValue={this.state.endDate}
+                          sx={{ width: 220 }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </LocalizationProvider>
+                  {this.state.dateError !== "" ? (
+                    <p style={this.pstyle}>{this.state.dateError}</p>
+                  ) : (
+                    ""
+                  )}
+                  <br />
+                  <br />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={
+                      this.state.leaveDesc === "" ||
+                      this.state.startDate === "" ||
+                      this.state.endDate === "" ||
+                      this.state.leaveDescError !== "" ||
+                      this.state.dateError !== ""
+                    }
+                  >
+                    Submit
+                  </Button><br/>
+                  <p style={this.successStyle}>{this.state.successMessage?this.state.successMessage:''}</p>
+                </form>
+              </Paper>
+            </Grid>
+          )}
         </TabPanel>
         <TabPanel value={this.state.value} index={1} loader={true}>
           {this.state.rows.length !== 0 ? (
