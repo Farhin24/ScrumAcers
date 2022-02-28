@@ -3,6 +3,8 @@ import { Grid, Paper, TextField, Button } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { connect,useDispatch } from "react-redux";
+import { login } from '../action'
 
 const Loginform = (props) => {
   const { setemail, setpassword } = props;
@@ -55,6 +57,7 @@ const Loginform = (props) => {
           localStorage.setItem("LoginData", JSON.stringify(res.data));
           setIsLoading(false);
           navigator.push("/StandUpForm");
+		  mapDispatchToProps();
         })
         .catch((error) => {
           setIsLoading(false);
@@ -98,6 +101,13 @@ const Loginform = (props) => {
     return errormsgs;
   };
 
+  const dispatch = useDispatch();
+
+  const mapDispatchToProps = () => {
+	 dispatch(login(fvalues.email, fvalues.email)) 
+	}
+
+
   return (
     <Grid>
       <Paper elevation={15} style={newpaperstyle}>
@@ -135,5 +145,7 @@ const Loginform = (props) => {
     </Grid>
   );
 };
+
+
 
 export default Loginform;
