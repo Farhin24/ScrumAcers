@@ -8,6 +8,10 @@ import * as React from 'react';
 import "./css/Views.css";
 import { maxHeight } from '@mui/system';
 import { TextField } from '@mui/material';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { useState } from 'react';
+
 
 const style = {
     position: 'absolute',
@@ -21,11 +25,44 @@ const style = {
     p: 4,
   };
 
+
+  
+
   
   export default function StandUpFormView() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    //console.log("props data",this.props.data);
+    
+    const[formData,setFormData] = React.useState([]);
+    useEffect(() =>{
+      getRowValues();
+    },[]);
+    const getRowValues = () => {
+      let temp=JSON.parse(localStorage.getItem("LoginData"));
+      let token = "Bearer " + temp.token;
+          axios
+            .get(
+              "https://scrum-acers-backend.herokuapp.com/api/user/fetchStandUpForm",
+              {
+                headers: {
+                  Authorization: `${token}`,
+                }
+              }
+            )
+            .then((res) => {
+              console.log({ rows: res.data.data });
+              //console.log(res.data)
+              if(res.data.data.length>0){
+                  setFormData(res.data.data);
+              }
+              
+            })
+            .catch((err) => {
+              console.log({ errorMessage: err.response.data.message });
+            });
+    };
 
     return (
         <div>
@@ -44,18 +81,11 @@ const style = {
       <Typography variant="h2" gutterBottom component="div">
             Daily Stand-Up Reviews
         </Typography>
-      <Button className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button>
-      <Button className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button>
-      <Button className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button>
-      <Button className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button>
-      <Button className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button>
-      <Button className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button>
-      <Button className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button>
-      <Button className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button>
-    </Box>
-    
-    
-      <Modal
+      {formData.map((item,index) =>
+        <div key={index}> 
+        {console.log(item)}
+        <Button  className="modal_shade" variant="contained" onClick={handleOpen}>user_name reviews</Button> 
+        <Modal
         width= "100%"
         open={open}
         onClose={handleClose}
@@ -78,22 +108,22 @@ const style = {
       </div>
       <div class="vemployee_id">
       <Typography sx={{ fontSize: 14 }} color="body2" gutterBottom>
-          A101
+          {item.employee_id}
         </Typography>
       </div>
-      <div class="vemployee_name">
+      {/* <div class="vemployee_name">
       <Typography sx={{ fontSize: 14 }} color="body2" gutterBottom>
           ABCD employee
         </Typography>
-      </div>
+      </div> */}
       <div class="vteam_name">
       <Typography sx={{ fontSize: 14 }} color="body2" gutterBottom>
-          ABCD team_name
+          {item.team_id}
         </Typography>
       </div>
       <div class="vdate">
       <Typography sx={{ fontSize: 14 }} color="body2" gutterBottom>
-          dd/mm/yyyy
+          {item.creation_timestamp}
         </Typography>
       </div>
     </div>
@@ -104,7 +134,7 @@ const style = {
                 filled
                 color ="info"
                 id="outlined-basic" 
-                value="Please put Yesterday's Goals achieved"  
+                value={item.ques_1}  
                 name = "yesterday_goals"
                 label = "Yesterday's goals"
     />
@@ -116,7 +146,7 @@ const style = {
                 filled
                 color ="info"
                 id="outlined-basic" 
-                value="Please put Yesterday's Goals achieved"  
+                value= {item.ques_2}    
                 name = "today's_goals"
                 label = "Today's goals"
     />
@@ -128,7 +158,7 @@ const style = {
                 filled
                 color ="info"
                 id="outlined-basic" 
-                value="Please put Yesterday's Goals achieved"  
+                value = {item.ques_3}    
                 name = "challenges_faced"
                 label = "Challenges Faced"
     />
@@ -144,6 +174,11 @@ const style = {
     </Fade>
     </div>
     </Modal>
+    </div>
+        
+        )}
+      
+    </Box>
   </div>
   
     
