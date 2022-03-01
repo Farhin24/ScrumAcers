@@ -66,7 +66,7 @@ const StandUpForm = () => {
   //const[rows,setRowValues] = useState(rows);
   useEffect(() =>{
     getRowValues();
-  });
+  },[]);
 
   const getRowValues = () => {
     let temp=JSON.parse(localStorage.getItem("LoginData"));
@@ -81,20 +81,16 @@ const StandUpForm = () => {
             }
           )
           .then((res) => {
-            console.log({ rows: res.data.data });
-            console.log(res.data)
             if(res.data.data.length>0){
               setFormStatus(true);
               setMessage("");
             }
             else{
               setFormStatus(false);
-              setMessage(res.data.message);
-              
             }
           })
           .catch((err) => {
-            console.log({ errorMessage: err.response.data.message });
+            setFormStatus(false);
           });
   };
 
@@ -118,12 +114,11 @@ const StandUpForm = () => {
             }
           )
           .then((res) => {
-            console.log({ rows: res.data.data });
             handleReset();
             handleClick();
+            getRowValues();
           })
           .catch((err) => {
-            console.log({ errorMessage: err.response.data.message });
             handleClickerr();
           });
   };
