@@ -1,20 +1,3 @@
-// import Logo from '../images/Logo.png'
-// import '../css/header.css'
-// const h1={margin:'20px',color:'grey'}
-// const Header=()=>
-// {
-//     return(
-//         <div className="header">
-//         <div className="header-t">
-//           <div className="header-logo">
-//             <a href="/" className="header-logo"><img src={Logo}/></a>
-//           </div>
-//           <h1 style={h1}> <i>&ensp;&ensp;&ensp;Manage your daily scrum activities here!</i></h1>
-//        </div>
-// </div>
-// )
-//     }
-
 import * as React from "react";
 import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
@@ -23,22 +6,29 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Logo from "../images/Logo2.png";
-import {connect} from 'react-redux'
-import {logout} from '../action'
+import { connect } from "react-redux";
+import { logout } from "../action";
+import { slide as Burger, SubMenu, Item } from "burger-menu";
+import "burger-menu/lib/index.css";
 
-class Header extends React.Component{
-  constructor(){
+class Header extends React.Component {
+  constructor() {
     super();
-    
+    this.state = {
+      isOpen: false,
+    };
   }
 
-  handleClick=()=>{
+  setIsOpen = (isOpen) => {
+    this.setState({ isOpen: isOpen });
+  };
+
+  handleClick = () => {
     localStorage.clear();
     this.props.changeStatus();
-  }
+  };
 
-  render(){
-    console.log(this.props.username)
+  render() {
     return (
       <Box sx={{ bgcolor: "background.paper", flexGrow: 1 }}>
         <AppBar className="testing-header" position="static">
@@ -47,28 +37,61 @@ class Header extends React.Component{
               variant="h6"
               noWrap
               component="div"
-              sx={{ display: { xs: "none", md: "flex" } }}
+              sx={{ display: { md: "flex" } }}
             >
-              <img src={Logo} alt="Scrum Acers"/>
+              <Link to="/" style={{ textDecoration: "none" }}>
+                <img src={Logo} alt="Scrum Acers" />
+              </Link>
             </Typography>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Manage your daily scrum activities here!
             </Typography>
-            {this.props.username===""?
-            <Link to="/" style={{ textDecoration: "none" }}>
-              <Button>Login</Button>
-            </Link>:
-            <React.Fragment>
-            <Link to="/StandUpForm" style={{ textDecoration: "none" }}>
-              <Button>Scrum Form</Button>
-            </Link>
-            <Link to="/Leaves" style={{ textDecoration: "none" }}>
-              <Button>Apply Leave</Button>
-            </Link>
-            <Link to="/" style={{ textDecoration: "none" }}>
-              <Button onClick={this.handleClick}>Logout</Button>
-            </Link>
-            </React.Fragment>}
+            {this.props.username === "" ? (
+              <Link to="/" style={{ textDecoration: "none" }}>
+                <Button>Login</Button>
+              </Link>
+            ) : (
+              <React.Fragment>
+                <div onClick={() => this.setIsOpen(!this.state.isOpen)}>
+                  <i className="fa fa-bars fa-lg" />
+                </div>
+                <Burger
+                  className="burger-menu"
+                  isOpen={this.state.isOpen}
+                  selectedKey={"entry"}
+                  onClose={() => this.setIsOpen(false)}
+                >
+                  <Link to="/Announcement" style={{ textDecoration: "none" }}>
+                    <Item
+                      itemKey={"announcements"}
+                      text={"Announcements"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                    ></Item>
+                  </Link>
+                  <Link to="/StandUpForm" style={{ textDecoration: "none" }}>
+                    <Item
+                      itemKey={"scrumform"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Scrum Form"}
+                    ></Item>
+                  </Link>
+                  <Link to="/Leaves" style={{ textDecoration: "none" }}>
+                    <Item
+                      itemKey={"leaves"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Apply Leaves"}
+                    ></Item>
+                  </Link>
+                  <Link to="/" style={{ textDecoration: "none" }}>
+                    <Item
+                      onClick={this.handleClick}
+                      itemKey={"logout"}
+                      text={"Logout"}
+                    ></Item>
+                  </Link>
+                </Burger>
+              </React.Fragment>
+            )}
           </Toolbar>
         </AppBar>
       </Box>
@@ -76,19 +99,20 @@ class Header extends React.Component{
   }
 }
 
-const mapStateToProps=(state)=>{
+const mapStateToProps = (state) => {
   return {
-    username:state.username,
-    userId:state.userId,
-    loggedIn:state.loggedIn
-  }
-}
+    username: state.username,
+    userId: state.userId,
+    loggedIn: state.loggedIn
+  };
+};
 
-const mapDispatchToProps=(dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
   return {
-    changeStatus:()=>{dispatch(logout())}
-  }
-}
+    changeStatus: () => {
+      dispatch(logout());
+    },
+  };
+};
 
-// export default Header;
-export default connect(mapStateToProps,mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

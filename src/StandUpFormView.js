@@ -40,8 +40,8 @@ const style = {
       getRowValues();
     },[]);
     const getRowValues = () => {
-      let temp=JSON.parse(localStorage.getItem("LoginData"));
-      let token = "Bearer " + temp.token;
+      let userData=JSON.parse(localStorage.getItem("LoginData"));
+      let token = "Bearer " + userData.token;
           axios
             .get(
               "https://scrum-acers-backend.herokuapp.com/api/user/fetchStandUpForm",

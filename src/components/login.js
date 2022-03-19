@@ -3,11 +3,11 @@ import { Grid, Paper, TextField, Button } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { connect,useDispatch } from "react-redux";
-import { login } from '../action'
+import { connect } from "react-redux";
+import { login } from "../action";
+import { Loader } from "react-loader-overlay";
 
 const Loginform = (props) => {
-  const { setemail, setpassword } = props;
   const newpaperstyle = {
     margin: "30px auto",
     width: 400,
@@ -18,7 +18,6 @@ const Loginform = (props) => {
   const pstyle = { color: "red" };
   const firstval = { email: "", password: "" };
   const [fvalues, setV] = useState(firstval);
-  const [submitinit, setSubmitStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigator = useHistory();
 
@@ -40,32 +39,27 @@ const Loginform = (props) => {
     s.preventDefault();
     if (validfields) {
       seterrors(validationrules(fvalues));
-	  setErrorMessage("");
+      setErrorMessage("");
       var len = Object.keys(errormsgs).length;
-      if (len === 0) {
-        setSubmitStatus(true);
-      }
       setIsLoading(true);
-	  console.log(errormsgs)
-	  if(len===0){
-		axios
-        .post("https://scrum-acers-backend.herokuapp.com/api/user/login", {
-          ...fvalues,
-        })
-        .then((res) => {
-          console.table(res);
-          localStorage.setItem("LoginData", JSON.stringify(res.data));
-          setIsLoading(false);
-          navigator.push("/StandUpForm");
-		  mapDispatchToProps();
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          console.log(error.response.data.message);
-          setErrorMessage(error.response.data.message);
-        });
-	  }
-      
+      if (len === 0) {
+        axios
+          .post("https://scrum-acers-backend.herokuapp.com/api/user/login", {
+            ...fvalues,
+          })
+          .then((res) => {
+            localStorage.setItem("LoginData", JSON.stringify(res.data));
+            setIsLoading(false);
+            navigator.push("/StandUpForm");
+            props.logIn(fvalues);
+          })
+          .catch((error) => {
+            setIsLoading(false);
+            setErrorMessage(error.response.data.message);
+          });
+      } else {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -77,11 +71,11 @@ const Loginform = (props) => {
     }
   };
 
-  //   useEffect(() => {
-  //     if (Object.keys(ferrors).length === 0 && submitinit) {
-  //       console.log(fvalues);
-  //     }
-  //   }, [ferrors]);
+  useEffect(() => {
+    if (props.loggedIn) {
+      navigator.push("/StandUpForm");
+    }
+  }, [navigator, props]);
 
   const validationrules = (vals) => {
     const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -101,15 +95,11 @@ const Loginform = (props) => {
     return errormsgs;
   };
 
-  const dispatch = useDispatch();
-
-  const mapDispatchToProps = () => {
-	 dispatch(login(fvalues.email, fvalues.email)) 
-	}
-
+  // const dispatch = useDispatch();
 
   return (
     <Grid>
+      <Loader active={isLoading} />
       <Paper elevation={15} style={newpaperstyle}>
         <Grid>
           <h2 style={h2style}>Login Here!</h2>
@@ -146,6 +136,20 @@ const Loginform = (props) => {
   );
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logIn: (fvalues) => {
+      dispatch(login(fvalues.email, fvalues.email));
+    },
+  };
+};
 
+const mapStateToProps = (state) => {
+  return {
+    username: state.username,
+    userId: state.userId,
+    loggedIn: state.loggedIn,
+  };
+};
 
-export default Loginform;
+export default connect(mapStateToProps, mapDispatchToProps)(Loginform);

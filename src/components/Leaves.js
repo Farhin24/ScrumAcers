@@ -14,7 +14,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Grid, TextField } from "@material-ui/core";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -34,7 +34,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
   },
@@ -91,7 +90,7 @@ class Leaves extends React.Component {
       endDate: "",
       leaveDescError: "",
       dateError: "",
-      successMessage:""
+      successMessage: "",
     };
   }
 
@@ -110,7 +109,7 @@ class Leaves extends React.Component {
       endDate: eDate,
       leaveDescError: "",
       dateError: "",
-      successMessage:""
+      successMessage: "",
     });
     let token = "";
     try {
@@ -136,8 +135,25 @@ class Leaves extends React.Component {
         });
       })
       .catch((err) => {
-        this.setState({ errorMessage: err.response.data.message });
+        this.invalidLoginHandler(err);
       });
+  }
+
+  invalidLoginHandler = (err) => {  
+    this.setState({ errorMessage: err.response.data.message });
+
+    if(err.response.data.message==="Invalid Token..." || err.response.data.message==="Access Denied! Unauthorized User"){
+      toast.error("Invalid Login Session", {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+      setTimeout(function () {
+        localStorage.clear();
+        window.location.href = "/";
+      }, 3000);
+    }
+    
+    
+    
   }
 
   postSubmit() {
@@ -155,12 +171,12 @@ class Leaves extends React.Component {
         this.setState({ rows: res.data.data });
       })
       .catch((err) => {
-        this.setState({ errorMessage: err.response.data.message });
+        this.invalidLoginHandler(err);
       });
   }
 
   handleChange = (e) => {
-    let LoginData=JSON.parse(localStorage.getItem("LoginData"))
+    let LoginData = JSON.parse(localStorage.getItem("LoginData"));
     let token = "Bearer " + LoginData.token;
     let tabNum = parseInt(e.target.id.at(-1));
     this.setState({ value: tabNum, loader: true, rows: [], errorMessage: "" });
@@ -179,9 +195,9 @@ class Leaves extends React.Component {
         endDate: eDate,
         leaveDescError: "",
         dateError: "",
-        successMessage:""
+        successMessage: "",
       });
-      
+
       axios
         .get(
           "https://scrum-acers-backend.herokuapp.com/api/user/leavesInformation",
@@ -198,7 +214,7 @@ class Leaves extends React.Component {
           });
         })
         .catch((err) => {
-          this.setState({ errorMessage: err.response.data.message });
+          this.invalidLoginHandler(err);
         });
     } else if (tabNum === 1) {
       axios
@@ -214,7 +230,7 @@ class Leaves extends React.Component {
           this.setState({ rows: res.data.data });
         })
         .catch((err) => {
-          this.setState({ errorMessage: err.response.data.message });
+          this.invalidLoginHandler(err);
         });
     } else if (tabNum === 2) {
       axios
@@ -230,7 +246,7 @@ class Leaves extends React.Component {
           this.setState({ rows: res.data.data });
         })
         .catch((err) => {
-          this.setState({ errorMessage: err.response.data.message });
+          this.invalidLoginHandler(err);
         });
     }
   };
@@ -262,14 +278,16 @@ class Leaves extends React.Component {
         this.postSubmit();
       })
       .catch((err) => {
-        console.log(err.response);
+        toast.error("Some error occured", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
         this.setState({ errorMessage: err.response.data.message });
       });
   };
 
   newpaperstyle = {
     margin: "30px auto",
-    width: 400,
+    width: 425,
     padding: "20px 20px",
   };
 
@@ -322,8 +340,8 @@ class Leaves extends React.Component {
     }
   };
 
-  leaveRequest = (e) => {
-    e.preventDefault();
+  leaveRequest = (event) => {
+    event.preventDefault();
     let d = JSON.parse(localStorage.getItem("LoginData"));
     let token = "Bearer " + d.token;
     let data = {
@@ -353,10 +371,13 @@ class Leaves extends React.Component {
           endDate: "",
           leaveDescError: "",
           dateError: "",
-          successMessage:"Leave Request Raised Successfully"
+          successMessage: "Leave Request Raised Successfully",
         });
       })
       .catch((err) => {
+        toast.error("Some error occured", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
         this.setState({ errorMessage: err.response.data.message });
       });
   };
@@ -365,8 +386,8 @@ class Leaves extends React.Component {
     return (
       <Box
         sx={{
-          width: "80%",
-          ml: "10%",
+          width: "90%",
+          ml: "5%",
           mt: 3,
           bgcolor: "background.paper",
           boxShadow: 1,
@@ -376,6 +397,7 @@ class Leaves extends React.Component {
       >
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
+            sx={{flexWrap: 'wrap'}}
             textColor="primary"
             indicatorColor="primary"
             value={this.state.value}
@@ -409,7 +431,7 @@ class Leaves extends React.Component {
             <Grid>
               <Paper elevation={15} style={this.newpaperstyle}>
                 <Grid>
-                  <h2>Leave Request Form</h2>
+                  <div className="display-6 mb-3">Leave Request Form</div>
                 </Grid>
                 <form onSubmit={this.leaveRequest}>
                   <TextField
@@ -445,7 +467,7 @@ class Leaves extends React.Component {
                     ""
                   )}
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <Grid spacing={8} container>
+                    <Grid spacing={3} container>
                       <Grid item>
                         <TextField
                           id="date"
@@ -495,8 +517,11 @@ class Leaves extends React.Component {
                     }
                   >
                     Submit
-                  </Button><br/>
-                  <p style={this.successStyle}>{this.state.successMessage?this.state.successMessage:''}</p>
+                  </Button>
+                  <br />
+                  <p style={this.successStyle}>
+                    {this.state.successMessage ? this.state.successMessage : ""}
+                  </p>
                 </form>
               </Paper>
             </Grid>
@@ -642,6 +667,7 @@ class Leaves extends React.Component {
             this.state.errorMessage
           )}
         </TabPanel>
+        <ToastContainer />
       </Box>
     );
   }
