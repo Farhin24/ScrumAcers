@@ -69,8 +69,8 @@ const StandUpForm = () => {
   },[]);
 
   const getRowValues = () => {
-    let temp=JSON.parse(localStorage.getItem("LoginData"));
-    let token = "Bearer " + temp.token;
+    let userData=JSON.parse(localStorage.getItem("LoginData"));
+    let token = "Bearer " + userData.token;
         axios
           .get(
             "https://scrum-acers-backend.herokuapp.com/api/user/fetchStandUpForm",
@@ -96,13 +96,11 @@ const StandUpForm = () => {
 
   const setRowValues = (event) => {
     event.preventDefault();
-    let temp=JSON.parse(localStorage.getItem("LoginData"));
+    let userData=JSON.parse(localStorage.getItem("LoginData"));
     let data = {
        ...formValues
     };
-    let token = "Bearer " + temp.token;
-    console.log(JSON.stringify(temp));
-    console.log(JSON.stringify(data));
+    let token = "Bearer " + userData.token;
         axios
           .post(
             "https://scrum-acers-backend.herokuapp.com/api/user/dailyStandUpForm",
