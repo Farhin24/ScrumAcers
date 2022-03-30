@@ -7,6 +7,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { Loader } from "react-loader-overlay";
 
 class Announcement extends React.Component {
   constructor() {
@@ -15,42 +17,147 @@ class Announcement extends React.Component {
       announcementText: "",
       announcementTitle: "",
       emp_type: -1,
+      emp_id: 0,
       announcements: [],
       errorMessage: "",
+      isLoading: true,
     };
   }
 
   componentDidMount() {
     let userData = JSON.parse(localStorage.getItem("LoginData"));
     let emptype = userData.data[0].emp_type;
-    this.setState({ emp_type: emptype });
+    let empid = userData.data[0].emp_id;
+    this.setState({ emp_type: emptype, emp_id: empid });
 
-    let data = [
-      {
-        firstName: "Sukaran",
-        lastName: "Golani",
-        title: "Christmas week",
-        description:
-          "Need a SonarScanner on runner where you building the p achieve it",
-        datePosted: "19-March-2022",
-      },
-      {
-        firstName: "Aditya",
-        lastName: "Dixit",
-        title: "New Year week",
-        description:
-          "Need a SonarScanner on runner where you building the p achieve it",
-        datePosted: "19-March-2022",
-      },
-    ];
+    this.getAnnouncements();
+  }
 
-    this.setState({ announcements: data });
+  getAnnouncements() {
+    let token = this.getUserToken();
+
+    axios
+      .get(
+        "https://scrum-acers-backend.herokuapp.com/api/user/fetch-announcements",
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        this.setState({ announcements: res.data.data, isLoading: false });
+      })
+      .catch((err) => {
+        this.invalidLoginHandler(err);
+      });
   }
 
   postAnnouncement = (event) => {
     event.preventDefault();
     if (this.validateAnnouncementForm()) {
-      console.log("Hi");
+      let token = this.getUserToken();
+
+      let data = {
+        title: this.state.announcementTitle,
+        description: this.state.announcementText,
+      };
+
+      axios
+        .post(
+          "https://scrum-acers-backend.herokuapp.com/api/user/post-announcement",
+          data,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          toast.success("Announcement Posted Successfully", {
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+          this.setState({
+            announcementText: "",
+            announcementTitle: "",
+          });
+          this.getAnnouncements();
+        })
+        .catch((err) => {
+          toast.error("Some error occured", {
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+          this.setState({ errorMessage: err.response.data.message });
+        });
+    }
+  };
+
+  deleteAnnouncement = (postId) => {
+    let token = this.getUserToken();
+
+    let data = {
+      post_id: postId      
+    };
+
+    axios
+      .put(
+        "https://scrum-acers-backend.herokuapp.com/api/user/delete-announcement",
+        data,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        toast.success("Announcement Deleted Successfully", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });        
+        this.getAnnouncements();
+      })
+      .catch((err) => {
+        toast.error("Some error occured", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        this.setState({ errorMessage: err.response.data.message });
+      });
+  };
+
+  getUserToken() {
+    let token = "";
+    try {
+      let data = JSON.parse(localStorage.getItem("LoginData"));
+      token = "Bearer " + data.token;
+    } catch {
+      token = "";
+    }
+    return token;
+  }
+
+  invalidLoginHandler = (err) => {
+    if (err.response) {
+      this.setState({
+        errorMessage: err.response.data.message,
+        isLoading: false,
+      });
+
+      if (
+        err.response.data.message === "Invalid Token..." ||
+        err.response.data.message === "Access Denied! Unauthorized User"
+      ) {
+        toast.error("Invalid Login Session", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        setTimeout(function () {
+          localStorage.clear();
+          window.location.href = "/";
+        }, 3000);
+      }
+    } else {
+      this.setState({ isLoading: false });
+      toast.error("Some error occured", {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
     }
   };
 
@@ -60,16 +167,14 @@ class Announcement extends React.Component {
       this.state.announcementTitle === ""
     ) {
       let error = "Both the input fields are mandatory";
-      this.setState({ errorMessage: error }, () => {
-        return false;
-      });
+      this.setState({ errorMessage: error });
       toast.error(error, {
         position: toast.POSITION.BOTTOM_CENTER,
       });
+      return false;
     } else {
-      this.setState({ errorMessage: "" }, () => {
-        return true;
-      });
+      this.setState({ errorMessage: "" });
+      return true;
     }
   };
 
@@ -80,6 +185,7 @@ class Announcement extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <Loader active={this.state.isLoading} />
         <Box
           sx={{
             width: "70%",
@@ -88,7 +194,7 @@ class Announcement extends React.Component {
             bgcolor: "background.paper",
             boxShadow: 1,
             borderRadius: 5,
-            minHeight: 500
+            minHeight: 500,
           }}
         >
           <br />
@@ -98,7 +204,7 @@ class Announcement extends React.Component {
             onSubmit={this.postAnnouncement}
           >
             <div className="row">
-              <div className="text-start col-10">
+              <div className="text-start col-md-10 col-xs-12">
                 <div className="fw-bolder">Post an Announcement</div>
                 <div className="form-group form-inline">
                   <label htmlFor="Title">Title</label>
@@ -129,10 +235,10 @@ class Announcement extends React.Component {
                   Only employees below Job Level 5 can post an announcement
                 </small>
               </div>
-              <div className="col-2">
+              <div className="col-md-2 col-xs-12">
                 <span
-                  class="d-inline-block"
-                  tabindex="0"
+                  className="d-inline-block"
+                  tabIndex="0"
                   data-toggle="tooltip"
                   title="Only employees below Job Level 5 can post an announcement"
                 >
@@ -151,7 +257,7 @@ class Announcement extends React.Component {
           <div className="container-fluid text-start">
             {this.state.announcements.map((post, index) => {
               return (
-                <div className="row">
+                <div className="row" key={index}>
                   <div className="col-12">
                     <Card
                       className="mb-3"
@@ -162,7 +268,7 @@ class Announcement extends React.Component {
                           {post.title}
                         </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                          {post.datePosted}
+                          {post.created_at.split("T")[0]}
                         </Typography>
                         <Typography variant="body2">
                           {post.description}
@@ -170,8 +276,20 @@ class Announcement extends React.Component {
                       </CardContent>
                       <CardActions>
                         <Button size="small">
-                          Posted by {post.firstName + " " + post.lastName}
+                          Posted by {post.first_name + " " + post.last_name}
                         </Button>
+                        {post.posted_by === this.state.emp_id ? (
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="error"
+                            onClick={()=>this.deleteAnnouncement(post.id)}
+                          >
+                            Delete Post
+                          </Button>
+                        ) : (
+                          ""
+                        )}
                       </CardActions>
                     </Card>
                   </div>
@@ -181,6 +299,8 @@ class Announcement extends React.Component {
           </div>
           <ToastContainer />
         </Box>
+        <br />
+        <br />
       </React.Fragment>
     );
   }

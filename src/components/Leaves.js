@@ -140,20 +140,25 @@ class Leaves extends React.Component {
   }
 
   invalidLoginHandler = (err) => {  
-    this.setState({ errorMessage: err.response.data.message });
+    if(err.response){
+      this.setState({ errorMessage: err.response.data.message });
 
-    if(err.response.data.message==="Invalid Token..." || err.response.data.message==="Access Denied! Unauthorized User"){
-      toast.error("Invalid Login Session", {
+      if(err.response.data.message==="Invalid Token..." || err.response.data.message==="Access Denied! Unauthorized User"){
+        toast.error("Invalid Login Session", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        setTimeout(function () {
+          localStorage.clear();
+          window.location.href = "/";
+        }, 3000);
+      }   
+    }
+    else{
+      toast.error("Some error occured", {
         position: toast.POSITION.BOTTOM_CENTER,
       });
-      setTimeout(function () {
-        localStorage.clear();
-        window.location.href = "/";
-      }, 3000);
     }
-    
-    
-    
+             
   }
 
   postSubmit() {
@@ -362,7 +367,7 @@ class Leaves extends React.Component {
         }
       )
       .then((res) => {
-        toast("Leave Request Raised", {
+        toast.success("Leave Request Raised", {
           position: toast.POSITION.BOTTOM_CENTER,
         });
         this.setState({

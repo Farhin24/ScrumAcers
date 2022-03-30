@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Logo from "../images/Logo2.png";
 import { connect } from "react-redux";
 import { logout } from "../action";
-import { slide as Burger, SubMenu, Item } from "burger-menu";
+import { slide as Burger, Item } from "burger-menu";
 import "burger-menu/lib/index.css";
 
 class Header extends React.Component {
