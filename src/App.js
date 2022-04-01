@@ -7,6 +7,7 @@ import Loginform from "./components/login";
 import Header from "./components/Header";
 import Leaves from "./components/Leaves";
 import Announcement from "./components/Announcement";
+import MyProfile from "./components/ProfileView"
 
 function App() {
   const [email, setemail] = useState("");
@@ -22,6 +23,9 @@ function App() {
           <Route exact path="/">
             <Loginform />
           </Route>
+          <Route exact path="/MyProfile">
+          <MyProfile/>
+      </Route>
           <Route exact path="/Announcement">
             <Announcement />
           </Route>
