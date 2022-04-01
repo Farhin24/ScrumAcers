@@ -43,7 +43,7 @@ class Header extends React.Component {
                 <img src={Logo} alt="Scrum Acers" />
               </Link>
             </Typography>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h5" style={{marginRight:"10%",textShadow:"1px 1px",color:"darkcyan"}} component="div" sx={{ flexGrow: 1 }}>
               Manage your daily scrum activities here!
             </Typography>
             {this.props.username === "" ? (
@@ -61,6 +61,13 @@ class Header extends React.Component {
                   selectedKey={"entry"}
                   onClose={() => this.setIsOpen(false)}
                 >
+                  <Link to="/MyProfile" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"myProfile"}
+                      text={"My Profile"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                    ></Item>
+                  </Link>
                   <Link to="/Announcement" style={{ textDecoration: "none" }}>
                     <Item
                       itemKey={"announcements"}
