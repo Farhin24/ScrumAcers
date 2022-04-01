@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from "react-bootstrap/Card"
 import { Table } from "react-bootstrap";
+import {Row,Col} from "react-bootstrap"
+import { Badge, Pill } from 'evergreen-ui'
 
 
 class MyProfile extends React.Component {
@@ -16,70 +18,72 @@ class MyProfile extends React.Component {
   }
 
     render() {
-        const h2style = { margin: 10, color: "green" };
-        const h6style1={margin:10,color:"black",display:"inline-block"}
-        const h6style2={margin:10,color:"blue",display:"inline-block"}
+  
         const newpaperstyle = {
             margin: "30px auto",
-            width: 800,
+            width: 900,
             padding: "20px 20px",
           };
-          const Viewprofile = () =>{
-          const [fname,setfname]=useState("");
-          const[lname,setlname]=useState("")
-          const[etype,setetype]=useState("")
-          const[email,setemail]=useState("")
-          const[leaves,setleaves]=useState("")
-          const[joindate,setjoindate]=useState("")
-          const[teamid,setteamid]=useState("")
-          
-          }
+       
       return (
       <>
       <Grid>
       <Paper elevation={15} style={newpaperstyle}>
         <Grid>
-          <h2 className="text-primary display-6">Welcome to your Profile</h2>
+          <h4 className="text-primary" style={{marginLeft:"10px",textShadow:"1px 1px"}}>Welcome to your Profile</h4>
         </Grid>
         <Grid>
-        <Card style={{ width: '47rem' }}>
-        <Card.Body>
-    <Card.Title>Hi! Emma Bryan</Card.Title>
-    <br/>
+        <Card style={{ width: '54rem' }}>
+        <Card.Body >
+    
     <Card.Text>
      
-
-<Table hover style={{textAlign:"center"}}>
-  <thead>
-  </thead>
-  <tbody>
-    <tr>
-      <td >Employee Type</td>
-      <td style={{color:"blue"}}>Manager</td>
-    </tr>
-    <tr>
-      <td>Email</td>
-      <td style={{color:"blue"}}>emmabryan5@gmail.com</td>
-    </tr>
-    <tr>
-      <td>Joining Date</td>
-      <td style={{color:"blue"}}>2022-16-12</td>
-    </tr>
-    <tr>
-      <td>No. Of Leaves</td>
-      <td style={{color:"blue"}}>2</td>
-    </tr>
-    <tr>
-      <td>Team ID</td>
-      <td style={{color:"blue"}}>2</td>
-    </tr>
-  </tbody>
-</Table>
+    <Row>
+        <div style={{marginLeft:"10px"}}>
+          <Col >
+            <Table responsive className="table table-borderless table-condensed table-hover " style={{ marginTop: "10px",width:"700px",border:"none"}}>
+            <tbody style={{textAlign:"left",fontFamily:"sans-serif",fontSize:"17px",marginRight:"20%"}}>
+            <tr >
+                  <td>Employee Name</td>
+                  <td>Emma Bryan</td>              
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>abc@gmail.com</td>              
+                </tr>
+                <tr >
+                <td>Employee Position</td>
+                  <td>Junior Employee</td>      
+                </tr> 
+                <tr >
+                <td>Team Name</td>
+                  <td>Scrum Acers</td>      
+                </tr>    
+                <tr >
+                <td>Team Description</td>
+                  <td>This team is building a project named, 'scrum acers'</td>      
+                </tr>   
+                <tr >
+                <td>Leaves Left</td>
+                  <td>4</td>      
+                </tr> 
+                <tr >
+                <td>Badges Earned</td>
+                  <td><Pill color="green" height="30px" width="120px"><h6 style={{marginTop:"5px"}}>Devoted</h6></Pill></td>         
+                </tr> 
+                <tr>
+                  <td></td>
+                  <td ><Pill color="teal" height="30px" width="120px"><h6 style={{marginTop:"5px"}}>Great Job</h6></Pill></td> 
+                </tr>
+               
+                 </tbody>       
+                  </Table>
+                  </Col>
+                  </div></Row>
     
     </Card.Text> 
   
    
-    <Button variant="secondary">Edit Profile</Button>
   </Card.Body>
 </Card>
                    
