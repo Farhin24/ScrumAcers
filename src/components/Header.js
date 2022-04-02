@@ -75,7 +75,7 @@ class Header extends React.Component {
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
                     ></Item>
                   </Link>
-                  <Link to="/StandUpForm" style={{ textDecoration: "none" }}>
+                  <Link to="/StandUpFormParent" style={{ textDecoration: "none" }}>
                     <Item
                       itemKey={"scrumform"}
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
