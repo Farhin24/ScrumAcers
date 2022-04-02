@@ -3,7 +3,8 @@ const initialState={
     userId:"",
     loggedIn:false,
     selectedCategory:"",
-    selectedProduct:null
+    selectedProduct:null,
+    empType:""
 }
 
 const authReducer=(state=initialState,action)=>{
@@ -12,6 +13,7 @@ const authReducer=(state=initialState,action)=>{
                             ...state,
                             username:action.username,
                             userId:action.userId,
+                            empType:action.empType,
                             loggedIn:true 
                         }
         case "LOGOUT" : return initialState

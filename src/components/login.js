@@ -51,6 +51,7 @@ const Loginform = (props) => {
             localStorage.setItem("LoginData", JSON.stringify(res.data));
             setIsLoading(false);
             navigator.push("/StandUpForm");
+            fvalues.emp_type=JSON.parse(localStorage.getItem("LoginData")).data[0].emp_type;
             props.logIn(fvalues);
           })
           .catch((error) => {
@@ -139,7 +140,7 @@ const Loginform = (props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logIn: (fvalues) => {
-      dispatch(login(fvalues.email, fvalues.email));
+      dispatch(login(fvalues.email, fvalues.email,fvalues.emp_type));
     },
   };
 };
