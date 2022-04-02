@@ -91,6 +91,7 @@ class Leaves extends React.Component {
       leaveDescError: "",
       dateError: "",
       successMessage: "",
+      empType:10
     };
   }
 
@@ -113,9 +114,9 @@ class Leaves extends React.Component {
     });
     let token = "";
     try {
-      let data = JSON.parse(localStorage.getItem("LoginData"));
+      let data = JSON.parse(localStorage.getItem("LoginData"));      
       token = "Bearer " + data.token;
-      this.setState({ employee_id: data.data[0].emp_id });
+      this.setState({ employee_id: data.data[0].emp_id, empType: data.data[0].emp_type});
     } catch {
       token = "";
     }
@@ -421,12 +422,13 @@ class Leaves extends React.Component {
               label="View Raised Requests"
               {...a11yProps(1)}
             />
+            {this.state.empType<5?
             <Tab
               value={2}
               sx={{ color: "black" }}
               label="Requests Received for Approval"
               {...a11yProps(2)}
-            />
+            />:""}
           </Tabs>
         </Box>
         <TabPanel value={this.state.value} index={0} loader={true}>
@@ -548,8 +550,8 @@ class Leaves extends React.Component {
                     <StyledTableCell align="center">
                       Leave to date
                     </StyledTableCell>
-                    <StyledTableCell align="center">Manager ID</StyledTableCell>
-                    <StyledTableCell align="center">Status</StyledTableCell>
+                    <StyledTableCell align="center">Manager Name</StyledTableCell>
+                    <StyledTableCell align="center">Approval Status</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -572,7 +574,7 @@ class Leaves extends React.Component {
                         {row.leave_end_date.split("T")[0]}
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        {row.manager_id}
+                        {row.manager_first_name+" "+row.manager_last_name}
                       </StyledTableCell>
                       <StyledTableCell align="center">
                         {row.status}
