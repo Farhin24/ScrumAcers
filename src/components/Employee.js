@@ -144,7 +144,7 @@ class Employee extends React.Component {
       team_id: this.state.team_id,
     };
     axios
-      .post("http://localhost:4000/api/user/create-employee", data, {
+      .post("https://scrum-acers-backend.herokuapp.com/api/user/create-employee", data, {
         headers: {
           Authorization: `${token}`,
         },
@@ -186,7 +186,7 @@ class Employee extends React.Component {
   viewAllEmployees() {
     let token = this.getToken();
     axios
-      .get("http://localhost:4000/api/user/fetch_all_employees", {
+      .get("https://scrum-acers-backend.herokuapp.com/api/user/fetch_all_employees", {
         headers: {
           Authorization: `${token}`,
         },
@@ -206,7 +206,7 @@ class Employee extends React.Component {
     };
     axios
       .put(
-        "http://localhost:4000/api/user/delete_employee",
+        "https://scrum-acers-backend.herokuapp.com/api/user/delete_employee",
         data,
         {
           headers: {
