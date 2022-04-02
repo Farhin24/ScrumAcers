@@ -12,17 +12,42 @@ import { TableCell } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button'
 import { Update } from '@material-ui/icons';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@mui/material';
 
 const ManageBadgeView = () => {
     const[badges_json,setBadgeJSON]= useState([])
+    const[badgesBoolean,setBoolean] = useState(false)
+    const[badges_post,setBadgesPost] = useState([])
+    
     //const[badge_json_processed,setBadgeJSONProcessed] = useState([])
     
-
+    const handleCloseSnackbar = () => setBoolean(false);
     useEffect(() =>{
     console.log("inside effect")
       getRowValues();
     },[]);
 
+      const UpdateBadges = () =>{
+        let userData=JSON.parse(localStorage.getItem("LoginData"));
+        let token = "Bearer " + userData.token;
+        console.log(badges_post)
+        axios.put(
+          "http://localhost:4000/api/user/update-employee-badges",
+           badges_post,
+          {
+            headers: {
+              Authorization: `${token}`,
+            }
+          }
+        ).then((res)=>{
+          console.log(res)
+          getRowValues()
+          //setBoolean(true)
+        }).catch((err)=>{
+          console.log(err.response)
+        })
+      }
 
       function ChangeColor(badge,badge_id){
         let badge_temp= JSON.parse(JSON.stringify(badge))
@@ -53,13 +78,14 @@ const ManageBadgeView = () => {
       let badge_temp= JSON.parse(JSON.stringify(badge))
        let post_update = []
        post_update["emp_id"] = badge_temp.emp_id
-       post_update["badges"] =[]
+       post_update["badge_id"] =[]
        badge_temp.Badges.forEach(badge => {
          if(badge.state === "selected"){
-           post_update.badges.push(badge.badge_id)
+           post_update.badge_id.push(badge.badge_id)
          }
        })
-       console.log(post_update)
+       setBadgesPost({...post_update})
+       UpdateBadges()
   }
 
     const getRowValues = () => {
@@ -70,7 +96,7 @@ const ManageBadgeView = () => {
       let json = [{}]
           axios
             .get(
-              "http://localhost:4000/api/user//fetch-employee-badges  ",
+              "https://scrum-acers-backend.herokuapp.com/api/user/fetch-employee-badges  ",
               {
                 headers: {
                   Authorization: `${token}`,
@@ -123,6 +149,11 @@ const ManageBadgeView = () => {
               borderRadius: 2,
             }}
           >
+      <Snackbar open={badgesBoolean} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity="sucess" sx={{ width: '100%' }}>
+          Badges Updated for Employee!
+        </Alert>
+      </Snackbar>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
