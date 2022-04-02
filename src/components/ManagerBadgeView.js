@@ -14,6 +14,7 @@ import Button from '@mui/material/Button'
 import { Update } from '@material-ui/icons';
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 
 const ManageBadgeView = () => {
     const[badges_json,setBadgeJSON]= useState([])
@@ -21,8 +22,8 @@ const ManageBadgeView = () => {
     const[badges_post,setBadgesPost] = useState([])
     
     //const[badge_json_processed,setBadgeJSONProcessed] = useState([])
-    
-    const handleCloseSnackbar = () => setBoolean(false);
+    const handleOpenSnackbar =() => setBoolean(true)
+    const handleCloseSnackbar = () => setBoolean(false)
     useEffect(() =>{
     console.log("inside effect")
       getRowValues();
@@ -43,7 +44,7 @@ const ManageBadgeView = () => {
         ).then((res)=>{
           console.log(res)
           getRowValues()
-          //setBoolean(true)
+          handleOpenSnackbar()
         }).catch((err)=>{
           console.log(err.response)
         })
@@ -151,7 +152,7 @@ const ManageBadgeView = () => {
           >
       <Snackbar open={badgesBoolean} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="sucess" sx={{ width: '100%' }}>
-          Badges Updated for Employee!
+          Badges Updated Successfully!
         </Alert>
       </Snackbar>
     <TableContainer component={Paper}>
