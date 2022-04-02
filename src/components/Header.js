@@ -15,7 +15,7 @@ class Header extends React.Component {
   constructor() {
     super();
     this.state = {
-      isOpen: false,
+      isOpen: false
     };
   }
 
@@ -43,7 +43,7 @@ class Header extends React.Component {
                 <img src={Logo} alt="Scrum Acers" />
               </Link>
             </Typography>
-            <Typography variant="h5" style={{marginRight:"10%",textShadow:"1px 1px",color:"darkcyan"}} component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h5" style={{marginRight:"10%"}} component="div" sx={{ flexGrow: 1 }}>
               Manage your daily scrum activities here!
             </Typography>
             {this.props.username === "" ? (
@@ -89,6 +89,13 @@ class Header extends React.Component {
                       text={"Apply Leaves"}
                     ></Item>
                   </Link>
+                  {this.props.empType<=3?<Link to="/Employee" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"employeeManagement"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Employee Management"}
+                    ></Item>
+                  </Link>:<div></div>}
                   <Link to="/" style={{ textDecoration: "none" }}>
                     <Item
                       onClick={this.handleClick}
@@ -110,7 +117,8 @@ const mapStateToProps = (state) => {
   return {
     username: state.username,
     userId: state.userId,
-    loggedIn: state.loggedIn
+    loggedIn: state.loggedIn,
+    empType: state.empType
   };
 };
 
