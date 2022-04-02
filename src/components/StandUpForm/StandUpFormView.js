@@ -12,6 +12,7 @@ import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
 import { Alert } from '@mui/material';
 import { Snackbar } from '@mui/material';
+import { RateReviewOutlined } from '@material-ui/icons';
 //import { alignProperty } from '@mui/material/styles/cssUtils';
 
 
@@ -27,18 +28,22 @@ const style = {
     p: 4,
   };
 
-
   
 
   
   export default function StandUpFormView() {
     const [open, setOpen] = React.useState(false);
     const [opensnackbar, setOpenSnack] = React.useState(false);
+    const [modal_data,setModaldata] = React.useState({});
     const handleOpen = (blockers) => {
+      console.log(blockers)
       if(blockers > 0 ){
+
         handleOpenSnackbar();
+        setOpen(true)
+        console.log(opensnackbar)
       }
-      setOpen(true);
+      setOpen(true)
       
     }
     const handleOpenSnackbar = () => setOpenSnack(true);
@@ -47,11 +52,11 @@ const style = {
       handleCloseSnackBar();
     };
     const handleCloseSnackBar = () => setOpenSnack(false)
-
-
-    
     //console.log("props data",this.props.data);
-    
+    function modal_data_update(reviews){
+      console.log(reviews)
+      setModaldata(reviews)
+    }
     const[formData,setFormData] = React.useState([]);
     useEffect(() =>{
       getRowValues();
@@ -70,7 +75,7 @@ const style = {
             )
             .then((res) => {
               console.log({ rows: res.data.data });
-              //console.log(res.data)
+              console.log(res.data)
               if(res.data.data.length>0){
                   setFormData(res.data.data);
               }
@@ -102,6 +107,7 @@ const style = {
                   Daily Stand-Up Form Reviews
               </Typography>
         </Grid>     
+        {console.log(formData)}
         {formData.length===0?
         <Grid container alignItems={"center"} justifyContent={"center"}>
           <Typography variant="h5" sx={{m:3}}>No Scrum Forms submitted for today</Typography>
@@ -109,9 +115,11 @@ const style = {
         :formData.map(reviews => (
             
           <Grid item sx={{ ml:2 ,mt:2, mb:2}} alignItems="center" key={reviews.form_id} md={10} sm={10}>
-            <Button sx={{minWidth:"70%"}} className="modal_shade" variant="contained" onClick={() =>handleOpen(reviews.blocker)}>{reviews.first_name} {reviews.last_name} review</Button>
-            <Modal
-            id = "Modal{{reviews.form_id}}"
+            <Button key= {reviews.form_id} x={{minWidth:"70%"}} className="modal_shade" variant="contained" onClick={() => {modal_data_update(reviews);handleOpen(reviews.blocker);}}>{reviews.first_name} {reviews.last_name} review</Button>
+          </Grid>
+        ))} 
+
+        <Modal
             width= "100%"
             open={open}
             onClose={handleClose}
@@ -132,17 +140,17 @@ const style = {
                     </Grid>
                     <Grid item md={11}>
                       <Paper sx ={{m:1,p:1, boxShadow: 1,borderRadius: 2, bgcolor:'#0d47a1',color: 'white'}} >
-                        Employee Name: {reviews.first_name} {reviews.last_name} 
+                        Employee Name: {modal_data.first_name} {modal_data.last_name} 
                       </Paper>
                       <Paper sx ={{m:1,p:1, boxShadow: 1,borderRadius: 2, bgcolor:'#0d47a1',color: 'white'}}  >
-                        Team Name: {reviews.team_name}
+                        Team Name: {modal_data.team_name}
                       </Paper>
                       <Paper sx ={{m:1,p:1, boxShadow: 1,borderRadius: 2, bgcolor:'#0d47a1',color: 'white'}}  >
-                        Date: {reviews.creation_timestamp.split("T")[0]}
+                        Date: {modal_data.creation_timestamp.split("T")[0]}
                       </Paper>
                       
                       <Paper sx ={{m:1,p:1, boxShadow: 1,borderRadius: 2, bgcolor:'#d50000',color: 'white'}}  >
-                        Number of Blockers: {reviews.blocker}
+                        Number of Blockers: {modal_data.blocker}
                       </Paper>
                     </Grid>
                     <Grid item >
@@ -151,7 +159,7 @@ const style = {
                         multiline 
                         rows={3} 
                         id="outlined-basic" 
-                        value={reviews.ques_1}  
+                        value={modal_data.ques_1}  
                         name = "yesterday_goals"
                         label = "Yesterday's goals"
                       />
@@ -162,7 +170,7 @@ const style = {
                         multiline 
                         rows={3} 
                         id="outlined-basic" 
-                        value={reviews.ques_2}  
+                        value={modal_data.ques_2}  
                         name = "today_goals"
                         label = "Today's goals"
                       />
@@ -173,7 +181,7 @@ const style = {
                         multiline 
                         rows={3} 
                         id="outlined-basic" 
-                        value={reviews.ques_3}  
+                        value={modal_data.ques_3}  
                         name = "challenges_faced"
                         label = "Challenges's Faced"
                       />
@@ -185,8 +193,6 @@ const style = {
                   </Box>
                   </Fade>    
             </Modal> 
-          </Grid>
-        ))} 
       </Grid>
     </Box>
       );
