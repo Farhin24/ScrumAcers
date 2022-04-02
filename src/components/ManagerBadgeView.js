@@ -40,7 +40,7 @@ const ManageBadgeView = () => {
         let token = "Bearer " + userData.token;
         console.log(post_update)
         axios.put(
-          "http://localhost:4000/api/user/update-employee-badges",
+          "https://scrum-acers-backend.herokuapp.com/api/user/update-employee-badges",
           post_update,
           {
             headers: {
