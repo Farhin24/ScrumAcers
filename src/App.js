@@ -5,6 +5,7 @@ import Loginform from "./components/login";
 import Header from "./components/Header";
 import Leaves from "./components/Leaves";
 import Announcement from "./components/Announcement";
+import ManagerBadgeView from "./components/ManagerBadgeView";
 import MyProfile from "./components/ProfileView"
 import Employee from "./components/Employee";
 import StandUpFormParent from "./components/StandUpForm/StandUpFormParent";
@@ -38,6 +39,9 @@ function App() {
           <Route exact path="/Leaves">
             <Leaves />
           </Route>
+          <Route exact path="/ManagerBadgeViews">
+            <ManagerBadgeView />
+            </Route>
           <Route exact path="/Employee">
             <Employee />
           </Route>

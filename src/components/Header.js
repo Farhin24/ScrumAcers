@@ -96,6 +96,13 @@ class Header extends React.Component {
                       text={"Employee Management"}
                     ></Item>
                   </Link>:<div></div>}
+                  {this.props.empType<=5?<Link to="/ManagerBadgeViews" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"employeeManagement"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Badges"}
+                    ></Item>
+                  </Link>:<div></div>}
                   <Link to="/" style={{ textDecoration: "none" }}>
                     <Item
                       onClick={this.handleClick}
