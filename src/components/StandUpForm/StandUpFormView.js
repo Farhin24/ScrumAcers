@@ -10,7 +10,9 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
-import { alignProperty } from '@mui/material/styles/cssUtils';
+import { Alert } from '@mui/material';
+import { Snackbar } from '@mui/material';
+//import { alignProperty } from '@mui/material/styles/cssUtils';
 
 
 const style = {
@@ -31,8 +33,23 @@ const style = {
   
   export default function StandUpFormView() {
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [opensnackbar, setOpenSnack] = React.useState(false);
+    const handleOpen = (blockers) => {
+      if(blockers > 0 ){
+        handleOpenSnackbar();
+      }
+      setOpen(true);
+      
+    }
+    const handleOpenSnackbar = () => setOpenSnack(true);
+    const handleClose =() => {
+      setOpen(false);
+      handleCloseSnackBar();
+    };
+    const handleCloseSnackBar = () => setOpenSnack(false)
+
+
+    
     //console.log("props data",this.props.data);
     
     const[formData,setFormData] = React.useState([]);
@@ -74,6 +91,11 @@ const style = {
               borderRadius: 2,
             }}
     >
+      <Snackbar open={opensnackbar} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+        <Alert onClose={handleCloseSnackBar} severity="error" sx={{ width: '100%' }}>
+          There are Blockers!! mentioned in reviews
+        </Alert>
+      </Snackbar>
       <Grid container  alignItems ={"center"} justifyContent={"center"}>
         <Grid item md={11} sm={12}>
               <Typography sx ={{mt:2}} variant="h3" gutterbottom >
@@ -85,8 +107,9 @@ const style = {
           <Typography variant="h5" sx={{m:3}}>No Scrum Forms submitted for today</Typography>
           </Grid>
         :formData.map(reviews => (
+            
           <Grid item sx={{ ml:2 ,mt:2, mb:2}} alignItems="center" key={reviews.form_id} md={10} sm={10}>
-            <Button sx={{minWidth:"70%"}} className="modal_shade" variant="contained" onClick={handleOpen}>{reviews.first_name} {reviews.last_name} review</Button>
+            <Button sx={{minWidth:"70%"}} className="modal_shade" variant="contained" onClick={() =>handleOpen(reviews.blocker)}>{reviews.first_name} {reviews.last_name} review</Button>
             <Modal
             id = "Modal{{reviews.form_id}}"
             width= "100%"
@@ -115,7 +138,11 @@ const style = {
                         Team Name: {reviews.team_name}
                       </Paper>
                       <Paper sx ={{m:1,p:1, boxShadow: 1,borderRadius: 2, bgcolor:'#0d47a1',color: 'white'}}  >
-                        Date: {reviews.creation_timestamp}
+                        Date: {reviews.creation_timestamp.split("T")[0]}
+                      </Paper>
+                      
+                      <Paper sx ={{m:1,p:1, boxShadow: 1,borderRadius: 2, bgcolor:'#d50000',color: 'white'}}  >
+                        Number of Blockers: {reviews.blocker}
                       </Paper>
                     </Grid>
                     <Grid item >
