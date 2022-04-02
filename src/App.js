@@ -5,6 +5,7 @@ import Loginform from "./components/login";
 import Header from "./components/Header";
 import Leaves from "./components/Leaves";
 import Announcement from "./components/Announcement";
+import ManagerBadgeView from "./components/ManagerBadgeView";
 import MyProfile from "./components/ProfileView"
 import StandUpFormParent from "./components/StandUpForm/StandUpFormParent";
 import { StylesProvider } from '@mui/styles';
@@ -36,6 +37,9 @@ function App() {
           </Route>
           <Route exact path="/Leaves">
             <Leaves />
+          </Route>
+          <Route exact path="/ManagerBadgeViews">
+            <ManagerBadgeView />
           </Route>
         </Switch>
         </StylesProvider>
