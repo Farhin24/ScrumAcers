@@ -7,6 +7,7 @@ import Leaves from "./components/Leaves";
 import Announcement from "./components/Announcement";
 import ManagerBadgeView from "./components/ManagerBadgeView";
 import MyProfile from "./components/ProfileView"
+import Employee from "./components/Employee";
 import StandUpFormParent from "./components/StandUpForm/StandUpFormParent";
 import { StylesProvider } from '@mui/styles';
 
@@ -27,8 +28,8 @@ function App() {
             <Loginform />
           </Route>
           <Route exact path="/MyProfile">
-          <MyProfile/>
-      </Route>
+            <MyProfile/>
+          </Route>
           <Route exact path="/Announcement">
             <Announcement />
           </Route>
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route exact path="/ManagerBadgeViews">
             <ManagerBadgeView />
+            </Route>
+          <Route exact path="/Employee">
+            <Employee />
           </Route>
         </Switch>
         </StylesProvider>
