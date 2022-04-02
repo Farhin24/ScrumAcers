@@ -5,9 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from "react-bootstrap/Card"
 import { Table } from "react-bootstrap";
 import {Row,Col} from "react-bootstrap"
-import { Badge, Pill } from 'evergreen-ui'
 import axios from "axios";
 import { useSelector } from "react-redux";
+import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
+import StarIcon from '@mui/icons-material/Star';
 
 
 class MyProfile extends React.Component {
@@ -34,7 +36,8 @@ class MyProfile extends React.Component {
       )
       .then((res) => {
         console.log(res.data.result[0])
-        this.setState({ profile: res.data.result[0]});
+        this.setState({ profile: res.data.result[0], badge_earned:res.data.result[0].badge_earned});
+        
       })
     ;
   }
@@ -111,12 +114,26 @@ class MyProfile extends React.Component {
                 </tr> 
                 <tr >
                 <td>Badges Earned</td>
-                  <td><Pill color="green" height="30px" width="120px"><h6 style={{marginTop:"5px"}}>Devoted</h6></Pill></td>         
-                </tr> 
-                <tr>
-                  <td></td>
-                  <td ><Pill color="teal" height="30px" width="120px"><h6 style={{marginTop:"5px"}}>Great Job</h6></Pill></td> 
+                  <td> 
+                        {this.state.badge_earned.length==0
+                        ?
+                        <div></div>
+                        :
+                        <div>
+                            {this.state.badge_earned.map(badge => {
+                            return(
+                            <Tooltip key={badge.badge_id} title={badge.badge_description}>
+                              <Chip  icon={<StarIcon style={{fill: "white"}} />} style={{backgroundColor:"#f57c00"}} sx={{color:"white",mr:1}} label= {badge.badge_name}/>
+                            </Tooltip>
+                            );
+                        })}</div>
+                        }
+                        </td>      
                 </tr>
+                            
+
+
+
                
                  </tbody>       
                   </Table>
