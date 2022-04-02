@@ -11,31 +11,37 @@ import { Table,TableRow,TableContainer,TableHead,TableBody } from '@mui/material
 import { TableCell } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button'
-import { Update } from '@material-ui/icons';
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
+
 
 const ManageBadgeView = () => {
+
     const[badges_json,setBadgeJSON]= useState([])
     const[badgesBoolean,setBoolean] = useState(false)
-    const[badges_post,setBadgesPost] = useState([])
+    const[badgesBooleanErr,setBooleanErr] = useState(false)
+    const[badges_post,setBadgesPost] = useState({})
+
     
     //const[badge_json_processed,setBadgeJSONProcessed] = useState([])
     const handleOpenSnackbar =() => setBoolean(true)
-    const handleCloseSnackbar = () => setBoolean(false)
+    const handleOpenSnackbarErr =() => setBooleanErr(true)
+    const handleCloseSnackbar = () => {
+      setBoolean(false)
+      setBooleanErr(false)
+    }
     useEffect(() =>{
     console.log("inside effect")
       getRowValues();
     },[]);
 
-      const UpdateBadges = () =>{
+      const UpdateBadges = (post_update) =>{
         let userData=JSON.parse(localStorage.getItem("LoginData"));
         let token = "Bearer " + userData.token;
-        console.log(badges_post)
+        console.log(post_update)
         axios.put(
           "http://localhost:4000/api/user/update-employee-badges",
-           badges_post,
+          post_update,
           {
             headers: {
               Authorization: `${token}`,
@@ -77,7 +83,7 @@ const ManageBadgeView = () => {
 
     function Update(badge) {
       let badge_temp= JSON.parse(JSON.stringify(badge))
-       let post_update = []
+       let post_update = {}
        post_update["emp_id"] = badge_temp.emp_id
        post_update["badge_id"] =[]
        badge_temp.Badges.forEach(badge => {
@@ -85,8 +91,14 @@ const ManageBadgeView = () => {
            post_update.badge_id.push(badge.badge_id)
          }
        })
-       setBadgesPost({...post_update})
-       UpdateBadges()
+       if(post_update.badge_id.length === 0){
+          handleOpenSnackbarErr()
+       }
+       else{
+         console.log(post_update)
+          UpdateBadges(post_update)
+       }
+       
   }
 
     const getRowValues = () => {
@@ -151,8 +163,13 @@ const ManageBadgeView = () => {
             }}
           >
       <Snackbar open={badgesBoolean} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity="sucess" sx={{ width: '100%' }}>
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
           Badges Updated Successfully!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={badgesBooleanErr} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+          No Badges Updated
         </Alert>
       </Snackbar>
     <TableContainer component={Paper}>
