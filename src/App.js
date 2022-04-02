@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import Leaves from "./components/Leaves";
 import Announcement from "./components/Announcement";
 import MyProfile from "./components/ProfileView"
+import Employee from "./components/Employee";
 
 function App() {
   const [email, setemail] = useState("");
@@ -24,8 +25,8 @@ function App() {
             <Loginform />
           </Route>
           <Route exact path="/MyProfile">
-          <MyProfile/>
-      </Route>
+            <MyProfile/>
+          </Route>
           <Route exact path="/Announcement">
             <Announcement />
           </Route>
@@ -37,6 +38,9 @@ function App() {
           </Route>
           <Route exact path="/Leaves">
             <Leaves />
+          </Route>
+          <Route exact path="/Employee">
+            <Employee />
           </Route>
         </Switch>
       </div>
