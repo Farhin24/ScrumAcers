@@ -37,9 +37,6 @@ function App() {
           <Route exact path="/Leaves">
             <Leaves />
           </Route>
-          <Route exact path="/ManagerBadgeViews">
-            <ManagerBadgeView />
-          </Route>
         </Switch>
         </StylesProvider>
       </div>
