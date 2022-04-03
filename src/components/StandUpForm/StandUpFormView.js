@@ -12,8 +12,7 @@ import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
 import { Alert } from '@mui/material';
 import { Snackbar } from '@mui/material';
-import { RateReviewOutlined } from '@material-ui/icons';
-//import { alignProperty } from '@mui/material/styles/cssUtils';
+
 
 
 const style = {
@@ -107,18 +106,21 @@ const style = {
                   Daily Stand-Up Form Reviews
               </Typography>
         </Grid>     
-        {console.log(formData)}
-        {formData.length===0?
+        {console.log(formData.length)}
+        {
+        formData.length===0
+        ?
         <Grid container alignItems={"center"} justifyContent={"center"}>
           <Typography variant="h5" sx={{m:3}}>No Scrum Forms submitted for today</Typography>
           </Grid>
-        :formData.map(reviews => (
+        :
+        <div>
+        {formData.map(reviews => (
             
           <Grid item sx={{ ml:2 ,mt:2, mb:2}} alignItems="center" key={reviews.form_id} md={10} sm={10}>
             <Button key= {reviews.form_id} x={{minWidth:"70%"}} className="modal_shade" variant="contained" onClick={() => {modal_data_update(reviews);handleOpen(reviews.blocker);}}>{reviews.first_name} {reviews.last_name} review</Button>
           </Grid>
-        ))} 
-
+        ))}
         <Modal
             width= "100%"
             open={open}
@@ -193,6 +195,8 @@ const style = {
                   </Box>
                   </Fade>    
             </Modal> 
+            </div>
+  }
       </Grid>
     </Box>
       );
