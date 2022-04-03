@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 import StarIcon from '@mui/icons-material/Star';
-
+import { Link } from "react-router-dom";
 
 class MyProfile extends React.Component {
   constructor() {
@@ -130,11 +130,7 @@ class MyProfile extends React.Component {
                         }
                         </td>      
                 </tr>
-                            
-
-
-
-               
+ 
                  </tbody>       
                   </Table>
                   </Col>
@@ -144,7 +140,13 @@ class MyProfile extends React.Component {
   </Card.Body>
 </Card>             
         </Grid>
-          </Paper></Grid>
+        <br/>
+        <Link to="/ChangePasswordForm" style={{ textDecoration: "none" }}>                    
+                 
+                  <Button variant="primary" style={{marginRight:"80%"}}>Change Password?
+</Button></Link>
+          </Paper>
+          </Grid>
           </>
       )
     }
