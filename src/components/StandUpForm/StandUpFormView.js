@@ -33,7 +33,7 @@ const style = {
   export default function StandUpFormView() {
     const [open, setOpen] = React.useState(false);
     const [opensnackbar, setOpenSnack] = React.useState(false);
-    const [modal_data,setModaldata] = React.useState({});
+    const [modal_data,setModaldata] = React.useState({creation_timestamp:""});
     const handleOpen = (blockers) => {
       console.log(blockers)
       if(blockers > 0 ){
