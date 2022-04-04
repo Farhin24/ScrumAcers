@@ -8,6 +8,7 @@ import Announcement from "./components/Announcement";
 import ManagerBadgeView from "./components/ManagerBadgeView";
 import MyProfile from "./components/ProfileView"
 import Employee from "./components/Employee";
+import HoursTracking from "./components/Hour_Tracking";
 import StandUpFormParent from "./components/StandUpForm/StandUpFormParent";
 import { StylesProvider } from '@mui/styles';
 
@@ -44,6 +45,9 @@ function App() {
             </Route>
           <Route exact path="/Employee">
             <Employee />
+          </Route>
+          <Route exact path="/HoursTracking">
+            <HoursTracking />
           </Route>
         </Switch>
         </StylesProvider>
