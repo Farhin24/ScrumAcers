@@ -23,6 +23,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Grid, TextField } from "@material-ui/core";
+import Swal from "sweetalert2";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -211,23 +212,40 @@ class Employee extends React.Component {
     let data = {
       emp_id: row.emp_id,
     };
-    axios
-      .put(
-        "https://scrum-acers-backend.herokuapp.com/api/user/delete_employee",
-        data,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        this.showSuccessToast(res.data.message);
-        this.viewAllEmployees();
-      })
-      .catch((err) => {
-        this.invalidLoginHandler(err);
-      });
+    Swal.fire({
+      title: 'Are you sure you want to delete '+row.first_name+' '+row.last_name+'?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .put(
+            "https://scrum-acers-backend.herokuapp.com/api/user/delete_employee",
+            data,
+            {
+              headers: {
+                Authorization: `${token}`,
+              },
+            }
+          )
+          .then((res) => {
+            Swal.fire(
+              'Deleted!',
+              'Employee '+row.first_name+' '+row.last_name+' has been deleted.',
+              'success'
+            )
+            this.viewAllEmployees();
+          })
+          .catch((err) => {
+            this.invalidLoginHandler(err);
+          });
+        
+      }
+    })    
   };
 
   newpaperstyle = {
