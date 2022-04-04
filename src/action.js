@@ -1,8 +1,9 @@
-export const login=(user,userid)=>{
+export const login=(user,userid,emp_type)=>{
     return {
         type: "LOGIN",
         username: user,
-        userId: userid
+        userId: userid,
+        empType:emp_type
     }
 }
 

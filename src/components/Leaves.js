@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Grid, TextField } from "@material-ui/core";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import EmptyState from "../images/empty_state.png";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -91,6 +92,7 @@ class Leaves extends React.Component {
       leaveDescError: "",
       dateError: "",
       successMessage: "",
+      empType:10
     };
   }
 
@@ -113,9 +115,9 @@ class Leaves extends React.Component {
     });
     let token = "";
     try {
-      let data = JSON.parse(localStorage.getItem("LoginData"));
+      let data = JSON.parse(localStorage.getItem("LoginData"));      
       token = "Bearer " + data.token;
-      this.setState({ employee_id: data.data[0].emp_id });
+      this.setState({ employee_id: data.data[0].emp_id, empType: data.data[0].emp_type});
     } catch {
       token = "";
     }
@@ -140,20 +142,25 @@ class Leaves extends React.Component {
   }
 
   invalidLoginHandler = (err) => {  
-    this.setState({ errorMessage: err.response.data.message });
+    if(err.response){
+      this.setState({ errorMessage: err.response.data.message });
 
-    if(err.response.data.message==="Invalid Token..." || err.response.data.message==="Access Denied! Unauthorized User"){
-      toast.error("Invalid Login Session", {
+      if(err.response.data.message==="Invalid Token..." || err.response.data.message==="Access Denied! Unauthorized User"){
+        toast.error("Invalid Login Session", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        setTimeout(function () {
+          localStorage.clear();
+          window.location.href = "/";
+        }, 3000);
+      }   
+    }
+    else{
+      toast.error("Some error occured", {
         position: toast.POSITION.BOTTOM_CENTER,
       });
-      setTimeout(function () {
-        localStorage.clear();
-        window.location.href = "/";
-      }, 3000);
     }
-    
-    
-    
+             
   }
 
   postSubmit() {
@@ -362,7 +369,7 @@ class Leaves extends React.Component {
         }
       )
       .then((res) => {
-        toast("Leave Request Raised", {
+        toast.success("Leave Request Raised", {
           position: toast.POSITION.BOTTOM_CENTER,
         });
         this.setState({
@@ -400,6 +407,8 @@ class Leaves extends React.Component {
             sx={{flexWrap: 'wrap'}}
             textColor="primary"
             indicatorColor="primary"
+            variant="scrollable"
+            scrollButtons="auto"
             value={this.state.value}
             onChange={this.handleChange}
             aria-label=""
@@ -416,17 +425,25 @@ class Leaves extends React.Component {
               label="View Raised Requests"
               {...a11yProps(1)}
             />
+            {this.state.empType<5?
             <Tab
               value={2}
               sx={{ color: "black" }}
               label="Requests Received for Approval"
               {...a11yProps(2)}
-            />
+            />:""}
           </Tabs>
         </Box>
         <TabPanel value={this.state.value} index={0} loader={true}>
-          {this.state.errorMessage !== "" ? (
-            this.state.errorMessage
+          {this.state.errorMessage !== "" ? (            
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item md={11}>
+                <img src={EmptyState} style={{ width: "50%" }} alt="Empty" />
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">{this.state.errorMessage}</Typography>
+              </Grid>
+            </Grid>
           ) : (
             <Grid>
               <Paper elevation={15} style={this.newpaperstyle}>
@@ -543,8 +560,8 @@ class Leaves extends React.Component {
                     <StyledTableCell align="center">
                       Leave to date
                     </StyledTableCell>
-                    <StyledTableCell align="center">Manager ID</StyledTableCell>
-                    <StyledTableCell align="center">Status</StyledTableCell>
+                    <StyledTableCell align="center">Manager Name</StyledTableCell>
+                    <StyledTableCell align="center">Approval Status</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -567,7 +584,7 @@ class Leaves extends React.Component {
                         {row.leave_end_date.split("T")[0]}
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        {row.manager_id}
+                        {row.manager_first_name+" "+row.manager_last_name}
                       </StyledTableCell>
                       <StyledTableCell align="center">
                         {row.status}
@@ -578,7 +595,14 @@ class Leaves extends React.Component {
               </Table>
             </TableContainer>
           ) : (
-            this.state.errorMessage
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item md={11}>
+                <img src={EmptyState} style={{ width: "50%" }}  alt="Empty"/>
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">{this.state.errorMessage}</Typography>
+              </Grid>
+            </Grid>
           )}
         </TabPanel>
         <TabPanel value={this.state.value} index={2} loader={true}>
@@ -664,7 +688,14 @@ class Leaves extends React.Component {
               </Table>
             </TableContainer>
           ) : (
-            this.state.errorMessage
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item md={11}>
+                <img src={EmptyState} style={{ width: "50%" }}  alt="Empty"/>
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">{this.state.errorMessage}</Typography>
+              </Grid>
+            </Grid>
           )}
         </TabPanel>
         <ToastContainer />

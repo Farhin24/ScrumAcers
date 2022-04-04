@@ -8,22 +8,45 @@ import Button from "@mui/material/Button";
 import Logo from "../images/Logo2.png";
 import { connect } from "react-redux";
 import { logout } from "../action";
-import { slide as Burger, SubMenu, Item } from "burger-menu";
+import { slide as Burger, Item } from "burger-menu";
 import "burger-menu/lib/index.css";
+import { isExpired, decodeToken } from "react-jwt";
+import axios from 'axios'
 
 class Header extends React.Component {
   constructor() {
     super();
     this.state = {
-      isOpen: false,
+      isOpen: false
     };
   }
+    
+
 
   setIsOpen = (isOpen) => {
     this.setState({ isOpen: isOpen });
   };
 
   handleClick = () => {
+    let userData=JSON.parse(localStorage.getItem("LoginData"));
+    let tokens = userData.token
+    let token = decodeToken(userData.token);
+    let login_time = new Date(token.iat * 1000)
+    let current_time = new Date()
+    let logout_time = Math.floor((current_time.getTime()-login_time.getTime())/(60000))
+    axios.put("https://scrum-acers-backend.herokuapp.com/api/user/logout",
+    {duration:logout_time},
+    {
+      headers: {
+        Authorization: `Bearer ${tokens}`,
+      }
+    }).then((res)=>{
+      
+      console.log(res)
+    }).catch((err) => {
+      
+      console.log(err)
+    })  
     localStorage.clear();
     this.props.changeStatus();
   };
@@ -43,7 +66,7 @@ class Header extends React.Component {
                 <img src={Logo} alt="Scrum Acers" />
               </Link>
             </Typography>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h5" style={{marginRight:"10%"}} component="div" sx={{ flexGrow: 1 }}>
               Manage your daily scrum activities here!
             </Typography>
             {this.props.username === "" ? (
@@ -61,6 +84,13 @@ class Header extends React.Component {
                   selectedKey={"entry"}
                   onClose={() => this.setIsOpen(false)}
                 >
+                  <Link to="/MyProfile" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"myProfile"}
+                      text={"My Profile"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                    ></Item>
+                  </Link>
                   <Link to="/Announcement" style={{ textDecoration: "none" }}>
                     <Item
                       itemKey={"announcements"}
@@ -68,7 +98,7 @@ class Header extends React.Component {
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
                     ></Item>
                   </Link>
-                  <Link to="/StandUpForm" style={{ textDecoration: "none" }}>
+                  <Link to="/StandUpFormParent" style={{ textDecoration: "none" }}>
                     <Item
                       itemKey={"scrumform"}
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
@@ -82,11 +112,32 @@ class Header extends React.Component {
                       text={"Apply Leaves"}
                     ></Item>
                   </Link>
+                  {this.props.empType<=3?<Link to="/Employee" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"employeeManagement"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Employee Management"}
+                    ></Item>
+                  </Link>:<div></div>}
+                  {this.props.empType<=5?<Link to="/ManagerBadgeViews" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"employeeManagement"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Badges"}
+                    ></Item>
+                  </Link>:<div></div>}
+                  {this.props.empType<=5?<Link to="/HoursTracking" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"employeeManagement"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Team Hours"}
+                    ></Item>
+                  </Link>:<div></div>}
                   <Link to="/" style={{ textDecoration: "none" }}>
                     <Item
                       onClick={this.handleClick}
                       itemKey={"logout"}
-                      text={"Logout"}
+                      text={"Logout"}   
                     ></Item>
                   </Link>
                 </Burger>
@@ -103,7 +154,8 @@ const mapStateToProps = (state) => {
   return {
     username: state.username,
     userId: state.userId,
-    loggedIn: state.loggedIn
+    loggedIn: state.loggedIn,
+    empType: state.empType
   };
 };
 

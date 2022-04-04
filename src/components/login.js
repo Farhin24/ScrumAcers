@@ -51,7 +51,7 @@ const Loginform = (props) => {
           .then((res) => {
             localStorage.setItem("LoginData", JSON.stringify(res.data));
             setIsLoading(false);
-            navigator.push("/StandUpFormParent");
+            navigator.push("/Announcement");
             fvalues.emp_type=JSON.parse(localStorage.getItem("LoginData")).data[0].emp_type;
             props.logIn(fvalues);
           })
