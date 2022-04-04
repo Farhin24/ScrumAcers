@@ -10,6 +10,8 @@ import { connect } from "react-redux";
 import { logout } from "../action";
 import { slide as Burger, Item } from "burger-menu";
 import "burger-menu/lib/index.css";
+import Notification from "./Notification";
+import PersonIcon from '@mui/icons-material/Person';
 import { isExpired, decodeToken } from "react-jwt";
 import axios from 'axios'
 
@@ -66,7 +68,7 @@ class Header extends React.Component {
                 <img src={Logo} alt="Scrum Acers" />
               </Link>
             </Typography>
-            <Typography variant="h5" style={{marginRight:"10%"}} component="div" sx={{ flexGrow: 1 }}>
+            <Typography className="d-none d-sm-block" variant="h5" style={{marginRight:"10%"}} component="div" sx={{ flexGrow: 1 }}>
               Manage your daily scrum activities here!
             </Typography>
             {this.props.username === "" ? (
@@ -75,6 +77,14 @@ class Header extends React.Component {
               </Link>
             ) : (
               <React.Fragment>
+                <div style={{marginRight:"20px"}} title="My Profile">
+                  <Link to="/MyProfile" style={{ textDecoration: "none" }}>    
+                    <PersonIcon color="action"/>
+                  </Link>
+                </div>
+                <div style={{marginRight:"20px"}} title="Notifications">
+                  <Notification />
+                </div>
                 <div onClick={() => this.setIsOpen(!this.state.isOpen)}>
                   <i className="fa fa-bars fa-lg" />
                 </div>
@@ -103,6 +113,13 @@ class Header extends React.Component {
                       itemKey={"scrumform"}
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
                       text={"Scrum Form"}
+                    ></Item>
+                  </Link>
+                  <Link to="/SurveyFormParent" style={{ textDecoration: "none" }}>
+                    <Item
+                      itemKey={"surveyform"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Survey Form"}
                     ></Item>
                   </Link>
                   <Link to="/Leaves" style={{ textDecoration: "none" }}>
