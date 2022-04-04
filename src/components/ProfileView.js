@@ -34,8 +34,7 @@ class MyProfile extends React.Component {
         }
       )
       .then((res) => {
-        console.log(res.data.result[0])
-        this.setState({ profile: res.data.result[0], badge_earned:res.data.result[0].badge_earned});
+        this.setState({ profile: res.data.data[0], badge_earned:res.data.data[0].badge_earned});
         
       })
     ;
@@ -73,7 +72,7 @@ class MyProfile extends React.Component {
       <Grid>
       <Paper elevation={15} style={newpaperstyle}>
         <Grid>
-          <h4 className="text-primary" style={{marginLeft:"10px",textShadow:"1px 1px"}}>Welcome to your Profile</h4>
+          <div className="text-primary display-6">Welcome to your Profile</div>
         </Grid>
         <Grid>
         <Card style={{ width: '54rem' }}>
