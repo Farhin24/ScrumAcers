@@ -75,7 +75,7 @@ const Loginform = (props) => {
 
   useEffect(() => {
     if (props.loggedIn) {
-      navigator.push("/StandUpFormParent");
+      navigator.push("/Announcement");
     }
   }, [navigator, props]);
 
