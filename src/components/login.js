@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../action";
 import { Loader } from "react-loader-overlay";
+import { ToastContainer, toast } from "react-toastify";
 
 const Loginform = (props) => {
   const newpaperstyle = {
@@ -13,8 +14,8 @@ const Loginform = (props) => {
     width: 400,
     padding: "20px 20px",
   };
-  const h2style = { margin: 0, color: "green" };
-  const buttonstyle = { color: "green", margin: "20px 5px" };
+  const h2style = { margin: 0 };
+  const buttonstyle = {  margin: "20px 5px" };
   const pstyle = { color: "red" };
   const firstval = { email: "", password: "" };
   const [fvalues, setV] = useState(firstval);
@@ -50,7 +51,8 @@ const Loginform = (props) => {
           .then((res) => {
             localStorage.setItem("LoginData", JSON.stringify(res.data));
             setIsLoading(false);
-            navigator.push("/StandUpForm");
+            navigator.push("/StandUpFormParent");
+            fvalues.emp_type=JSON.parse(localStorage.getItem("LoginData")).data[0].emp_type;
             props.logIn(fvalues);
           })
           .catch((error) => {
@@ -73,7 +75,7 @@ const Loginform = (props) => {
 
   useEffect(() => {
     if (props.loggedIn) {
-      navigator.push("/StandUpForm");
+      navigator.push("/StandUpFormParent");
     }
   }, [navigator, props]);
 
@@ -95,6 +97,61 @@ const Loginform = (props) => {
     return errormsgs;
   };
 
+  const forgetPassword = ()=>{
+    setErrorMessage("")    
+    validationrules(fvalues)
+    if(fvalues.email!=="" && errormsgs.email!==""){
+      setIsLoading(true);
+      let data={
+        email:fvalues.email
+      }
+      axios
+      .put(
+        "http://localhost:4000/api/user/forget-password",
+        data
+      )
+      .then((res) => {
+        setIsLoading(false);
+        showSuccessToast(res.data.message)
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        invalidLoginHandler(err);
+      });
+    }
+    
+  }
+
+  const showSuccessToast=(message)=>{
+    toast.success(message, {
+      position: toast.POSITION.BOTTOM_CENTER,
+    });
+  }
+
+  const invalidLoginHandler = (err) => {
+    let error = "";
+    if (err.response) {
+      setErrorMessage(err.response.data.message)
+      if (
+        err.response.data.message === "Invalid Token..." ||
+        err.response.data.message === "Access Denied! Unauthorized User"
+      ) {
+        error = "Invalid Login Session";
+        setTimeout(function () {
+          localStorage.clear();
+          window.location.href = "/";
+        }, 3000);
+      } else {
+        error = err.response.data.message;
+      }
+    } else {
+      error = "Some error occured";
+    }
+    toast.error(error, {
+      position: toast.POSITION.BOTTOM_CENTER,
+    });
+  };
+
   // const dispatch = useDispatch();
 
   return (
@@ -102,7 +159,7 @@ const Loginform = (props) => {
       <Loader active={isLoading} />
       <Paper elevation={15} style={newpaperstyle}>
         <Grid>
-          <h2 style={h2style}>Login Here!</h2>
+          <div style={h2style} className="display-6">Login Here!</div>
         </Grid>
         <form onSubmit={submit}>
           <TextField
@@ -126,12 +183,19 @@ const Loginform = (props) => {
           />
           <p style={pstyle}>{ferrors.password}</p>
 
-          <Button style={buttonstyle} type="submit" variant="contained">
+          <div className="text-start" onClick={forgetPassword}>
+            <small className="form-text fw-bold">
+              Forgot Password?
+            </small>
+          </div>
+
+          <Button style={buttonstyle} type="submit" color="primary" variant="contained">
             Submit
           </Button>
           <p style={pstyle}>{errorMessage}</p>
         </form>
       </Paper>
+      <ToastContainer />
     </Grid>
   );
 };
@@ -139,7 +203,7 @@ const Loginform = (props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logIn: (fvalues) => {
-      dispatch(login(fvalues.email, fvalues.email));
+      dispatch(login(fvalues.email, fvalues.email,fvalues.emp_type));
     },
   };
 };
