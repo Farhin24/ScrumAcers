@@ -107,7 +107,7 @@ const Loginform = (props) => {
       }
       axios
       .put(
-        "https://scrum-acers-frontend.herokuapp.com/api/user/forget-password",
+        "https://scrum-acers-backend.herokuapp.com/api/user/forget-password",
         data
       )
       .then((res) => {
