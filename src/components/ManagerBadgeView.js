@@ -19,13 +19,11 @@ const ManageBadgeView = () => {
 
     const[badges_json,setBadgeJSON]= useState([])
     const[badgesBoolean,setBoolean] = useState(false)
-    const[badgesBooleanErr,setBooleanErr] = useState(false)
-    const[badges_post,setBadgesPost] = useState({})
+    const[badgesBooleanErr,setBooleanErr] = useState(false)    
 
     
     //const[badge_json_processed,setBadgeJSONProcessed] = useState([])
     const handleOpenSnackbar =() => setBoolean(true)
-    const handleOpenSnackbarErr =() => setBooleanErr(true)
     const handleCloseSnackbar = () => {
       setBoolean(false)
       setBooleanErr(false)

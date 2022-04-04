@@ -29,11 +29,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function valuetext(value) {
-  return `${value}°C`;
-}
-
-
 const StandUpForm = () => {
   const [formValues, setFormValues] = useState(defaultValues);
   const handleInputChange = (e) => {
@@ -104,7 +99,7 @@ const StandUpForm = () => {
        ...formValues
     };
     console.log(data)
-    if(data.q1 != "" || data.q2 != "" || data.q3 != "" ){
+    if(data.q1 !== "" || data.q2 !== "" || data.q3 !== "" ){
       let token = "Bearer " + userData.token;
         axios
           .post(

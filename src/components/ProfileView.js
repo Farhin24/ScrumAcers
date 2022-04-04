@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React from "react";
 import { Grid,Paper} from "@material-ui/core";
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,7 +6,6 @@ import Card from "react-bootstrap/Card"
 import { Table } from "react-bootstrap";
 import {Row,Col} from "react-bootstrap"
 import axios from "axios";
-import { useSelector } from "react-redux";
 import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 import StarIcon from '@mui/icons-material/Star';
@@ -115,7 +114,7 @@ class MyProfile extends React.Component {
                 <tr >
                 <td>Badges Earned</td>
                   <td> 
-                        {this.state.badge_earned.length==0
+                        {this.state.badge_earned.length===0
                         ?
                         <div></div>
                         :

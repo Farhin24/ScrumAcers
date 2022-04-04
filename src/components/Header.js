@@ -12,7 +12,7 @@ import { slide as Burger, Item } from "burger-menu";
 import "burger-menu/lib/index.css";
 import Notification from "./Notification";
 import PersonIcon from '@mui/icons-material/Person';
-import { isExpired, decodeToken } from "react-jwt";
+import { decodeToken } from "react-jwt";
 import axios from 'axios'
 
 class Header extends React.Component {
