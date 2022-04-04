@@ -10,6 +10,8 @@ import { connect } from "react-redux";
 import { logout } from "../action";
 import { slide as Burger, Item } from "burger-menu";
 import "burger-menu/lib/index.css";
+import { isExpired, decodeToken } from "react-jwt";
+import axios from 'axios'
 
 class Header extends React.Component {
   constructor() {
@@ -18,12 +20,33 @@ class Header extends React.Component {
       isOpen: false
     };
   }
+    
+
 
   setIsOpen = (isOpen) => {
     this.setState({ isOpen: isOpen });
   };
 
   handleClick = () => {
+    let userData=JSON.parse(localStorage.getItem("LoginData"));
+    let tokens = userData.token
+    let token = decodeToken(userData.token);
+    let login_time = new Date(token.iat * 1000)
+    let current_time = new Date()
+    let logout_time = Math.floor((current_time.getTime()-login_time.getTime())/(60000))
+    axios.put("https://scrum-acers-backend.herokuapp.com/api/user/logout",
+    {duration:logout_time},
+    {
+      headers: {
+        Authorization: `Bearer ${tokens}`,
+      }
+    }).then((res)=>{
+      
+      console.log(res)
+    }).catch((err) => {
+      
+      console.log(err)
+    })  
     localStorage.clear();
     this.props.changeStatus();
   };
@@ -96,11 +119,25 @@ class Header extends React.Component {
                       text={"Employee Management"}
                     ></Item>
                   </Link>:<div></div>}
+                  {this.props.empType<=5?<Link to="/ManagerBadgeViews" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"employeeManagement"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Badges"}
+                    ></Item>
+                  </Link>:<div></div>}
+                  {this.props.empType<=5?<Link to="/HoursTracking" style={{ textDecoration: "none" }}>                    
+                    <Item
+                      itemKey={"employeeManagement"}
+                      onClick={() => this.setIsOpen(!this.state.isOpen)}
+                      text={"Team Hours"}
+                    ></Item>
+                  </Link>:<div></div>}
                   <Link to="/" style={{ textDecoration: "none" }}>
                     <Item
                       onClick={this.handleClick}
                       itemKey={"logout"}
-                      text={"Logout"}
+                      text={"Logout"}   
                     ></Item>
                   </Link>
                 </Burger>
