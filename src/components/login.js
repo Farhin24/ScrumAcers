@@ -107,7 +107,7 @@ const Loginform = (props) => {
       }
       axios
       .put(
-        "http://localhost:4000/api/user/forget-password",
+        "https://scrum-acers-frontend.herokuapp.com/api/user/forget-password",
         data
       )
       .then((res) => {
@@ -185,7 +185,7 @@ const Loginform = (props) => {
 
           <div className="text-start" onClick={forgetPassword}>
             <small className="form-text fw-bold">
-              Forgot Password?
+              <Button>Forgot Password?</Button>
             </small>
           </div>
 
