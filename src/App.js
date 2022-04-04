@@ -8,8 +8,10 @@ import Announcement from "./components/Announcement";
 import ManagerBadgeView from "./components/ManagerBadgeView";
 import MyProfile from "./components/ProfileView"
 import Employee from "./components/Employee";
+import HoursTracking from "./components/Hour_Tracking";
 import StandUpFormParent from "./components/StandUpForm/StandUpFormParent";
 import { StylesProvider } from '@mui/styles';
+import SurveyFormParent from "./components/SurveyForm/SurveyFormParent";
 import ChangePasswordForm from "./components/ChangePasswordForm"
 
 function App() {
@@ -45,6 +47,12 @@ function App() {
             </Route>
           <Route exact path="/Employee">
             <Employee />
+          </Route>
+          <Route exact path="/SurveyFormParent">
+            <SurveyFormParent />
+          </Route>
+          <Route exact path="/HoursTracking">
+            <HoursTracking />
           </Route>
           <Route exact path="/ChangePasswordForm">
             <ChangePasswordForm />

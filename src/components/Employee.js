@@ -144,19 +144,23 @@ class Employee extends React.Component {
       team_id: this.state.team_id,
     };
     axios
-      .post("https://scrum-acers-backend.herokuapp.com/api/user/create-employee", data, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      })
+      .post(
+        "https://scrum-acers-backend.herokuapp.com/api/user/create-employee",
+        data,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
       .then((res) => {
         this.setState({
           first_name: "",
-          last_name: "",          
+          last_name: "",
           email_id: "",
           password: "",
           emp_type: "",
-          team_id: ""
+          team_id: "",
         });
         this.showSuccessToast(res.data.message);
       })
@@ -186,11 +190,14 @@ class Employee extends React.Component {
   viewAllEmployees() {
     let token = this.getToken();
     axios
-      .get("https://scrum-acers-backend.herokuapp.com/api/user/fetch_all_employees", {
-        headers: {
-          Authorization: `${token}`,
-        },
-      })
+      .get(
+        "https://scrum-acers-backend.herokuapp.com/api/user/fetch_all_employees",
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
       .then((res) => {
         this.setState({ employeeList: res.data.data });
       })
@@ -210,8 +217,8 @@ class Employee extends React.Component {
         data,
         {
           headers: {
-            Authorization: `${token}`
-          }
+            Authorization: `${token}`,
+          },
         }
       )
       .then((res) => {
@@ -267,7 +274,7 @@ class Employee extends React.Component {
           /^[A-Za-z][A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
         );
         value === ""
-          ? (message = "First Name cannot be empty")
+          ? (message = "Email Id cannot be empty")
           : regex.test(value)
           ? (message = "")
           : (message = "Email format is invalid");
@@ -403,7 +410,7 @@ class Employee extends React.Component {
                       Employee Type
                     </InputLabel>
                     <Select
-                      sx={{p:1}}
+                      sx={{ p: 1 }}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       value={this.state.emp_type}
@@ -428,7 +435,7 @@ class Employee extends React.Component {
                       Team Id
                     </InputLabel>
                     <Select
-                      sx={{p:1}}
+                      sx={{ p: 1 }}
                       value={this.state.team_id}
                       label="Team Number"
                       name="team_id"
@@ -451,7 +458,13 @@ class Employee extends React.Component {
                       this.state.email_id === "" ||
                       this.state.password === "" ||
                       this.state.team_id === "" ||
-                      this.state.emp_type === ""
+                      this.state.emp_type === "" ||
+                      this.state.error.email_id !== "" ||
+                      this.state.error.emp_type !== "" ||
+                      this.state.error.first_name !== "" ||
+                      this.state.error.last_name !== "" ||
+                      this.state.password !== "" ||
+                      this.state.error.team_id !== ""
                     }
                   >
                     Submit

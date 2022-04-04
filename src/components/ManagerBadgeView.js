@@ -91,13 +91,8 @@ const ManageBadgeView = () => {
            post_update.badge_id.push(badge.badge_id)
          }
        })
-       if(post_update.badge_id.length === 0){
-          handleOpenSnackbarErr()
-       }
-       else{
          console.log(post_update)
-          UpdateBadges(post_update)
-       }
+          UpdateBadges(post_update) 
        
   }
 
