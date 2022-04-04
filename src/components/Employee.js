@@ -462,7 +462,7 @@ class Employee extends React.Component {
                       this.state.error.email_id !== "" ||
                       this.state.error.emp_type !== "" ||
                       this.state.error.first_name !== "" ||
-                      this.state.error.last_name != "" ||
+                      this.state.error.last_name !== "" ||
                       this.state.password !== "" ||
                       this.state.error.team_id !== ""
                     }

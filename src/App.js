@@ -9,8 +9,7 @@ import MyProfile from "./components/ProfileView"
 import Employee from "./components/Employee";
 import StandUpFormParent from "./components/StandUpForm/StandUpFormParent";
 import { StylesProvider } from '@mui/styles';
-import SurveyFormEmployee from "./components/SurveyForm/SurveyFormEmployee";
-import SurveyFormManager from "./components/SurveyForm/SurveyFormManager";
+import SurveyFormParent from "./components/SurveyForm/SurveyFormParent";
 
 function App() {
   const [email, setemail] = useState("");
@@ -43,11 +42,8 @@ function App() {
           <Route exact path="/Employee">
             <Employee />
           </Route>
-          <Route exact path="/SurveyFormEmployee">
-            <SurveyFormEmployee />
-          </Route>
-          <Route exact path="/SurveyFormManager">
-            <SurveyFormManager />
+          <Route exact path="/SurveyFormParent">
+            <SurveyFormParent />
           </Route>
         </Switch>
         </StylesProvider>
