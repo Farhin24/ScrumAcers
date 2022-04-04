@@ -108,27 +108,27 @@ class Header extends React.Component {
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
                     ></Item>
                   </Link>
-                  <Link to="/StandUpFormParent" style={{ textDecoration: "none" }}>
+                  {this.props.empType>3?<Link to="/StandUpFormParent" style={{ textDecoration: "none" }}>
                     <Item
                       itemKey={"scrumform"}
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
                       text={"Scrum Form"}
                     ></Item>
-                  </Link>
-                  <Link to="/SurveyFormParent" style={{ textDecoration: "none" }}>
+                  </Link>:<div></div>}
+                  {this.props.empType>3?<Link to="/SurveyFormParent" style={{ textDecoration: "none" }}>
                     <Item
                       itemKey={"surveyform"}
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
                       text={"Survey Form"}
                     ></Item>
-                  </Link>
-                  <Link to="/Leaves" style={{ textDecoration: "none" }}>
+                  </Link>:<div></div>}
+                  {this.props.empType>3?<Link to="/Leaves" style={{ textDecoration: "none" }}>
                     <Item
                       itemKey={"leaves"}
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
                       text={"Apply Leaves"}
                     ></Item>
-                  </Link>
+                  </Link>:<div></div>}
                   {this.props.empType<=3?<Link to="/Employee" style={{ textDecoration: "none" }}>                    
                     <Item
                       itemKey={"employeeManagement"}
@@ -136,14 +136,14 @@ class Header extends React.Component {
                       text={"Employee Management"}
                     ></Item>
                   </Link>:<div></div>}
-                  {this.props.empType<5?<Link to="/ManagerBadgeViews" style={{ textDecoration: "none" }}>                    
+                  {this.props.empType<5 && this.props.empType>3?<Link to="/ManagerBadgeViews" style={{ textDecoration: "none" }}>                    
                     <Item
                       itemKey={"employeeManagement"}
                       onClick={() => this.setIsOpen(!this.state.isOpen)}
                       text={"Badges"}
                     ></Item>
                   </Link>:<div></div>}
-                  {this.props.empType<5?<Link to="/HoursTracking" style={{ textDecoration: "none" }}>                    
+                  {this.props.empType<5 && this.props.empType>3?<Link to="/HoursTracking" style={{ textDecoration: "none" }}>                    
                     <Item
                       itemKey={"employeeManagement"}
                       onClick={() => this.setIsOpen(!this.state.isOpen)}

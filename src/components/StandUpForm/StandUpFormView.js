@@ -12,8 +12,7 @@ import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
 import { Alert } from '@mui/material';
 import { Snackbar } from '@mui/material';
-
-
+import EmptyState from "../../images/empty_state.png";
 
 const style = {
     position: 'absolute',
@@ -33,7 +32,7 @@ const style = {
   export default function StandUpFormView() {
     const [open, setOpen] = React.useState(false);
     const [opensnackbar, setOpenSnack] = React.useState(false);
-    const [modal_data,setModaldata] = React.useState({});
+    const [modal_data,setModaldata] = React.useState({creation_timestamp:""});
     const handleOpen = (blockers) => {
       console.log(blockers)
       if(blockers > 0 ){
@@ -106,13 +105,17 @@ const style = {
                   Daily Stand-Up Form Reviews
               </Typography>
         </Grid>     
-        {console.log(formData.length)}
         {
         formData.length===0
         ?
-        <Grid container alignItems={"center"} justifyContent={"center"}>
-          <Typography variant="h5" sx={{m:3}}>No Scrum Forms submitted for today</Typography>
-          </Grid>
+        <Grid container alignItems="center" justifyContent="center">
+              <Grid item md={11}>
+                <img src={EmptyState} style={{ width: "50%" }} alt="Empty" />
+              </Grid>
+              <Grid item>
+              <Typography variant="h5" sx={{m:3}}>No Scrum Forms submitted for today</Typography>
+              </Grid>
+            </Grid>        
         :
         <div>
         {formData.map(reviews => (
