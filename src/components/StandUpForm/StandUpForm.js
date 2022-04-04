@@ -15,7 +15,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useEffect } from 'react';
 import { Slider } from '@mui/material';
-
+import FormSubmitted from '../../images/formSubmitted.png'
 
 
 var defaultValues = {
@@ -148,9 +148,18 @@ const StandUpForm = () => {
         height: maxHeight,
         display: 'inline-block'
       }}
-  ><Typography variant="h5" gutterBottom component="div">
-    Form is already submitted for today
-    </Typography></Box>
+  >
+            <Grid container alignItems="center" justifyContent="center">
+              <Typography variant="h4" gutterBottom component="div">
+                Scrum Form
+              </Typography>
+              <Grid item md={11}>
+                <img src={FormSubmitted} style={{ width: "50%" }} alt="Form Submitted" />
+              </Grid>
+              <Grid item>              
+              </Grid>
+            </Grid>
+    </Box>
       :
       <Box 
       sx = {{ 
@@ -184,7 +193,7 @@ const StandUpForm = () => {
                 mb:2
               }}
               multiline 
-              rows={8} 
+              rows={5} 
               id="outlined-basic" 
               label="Please put Yesterday's Goals achieved" 
               variant="outlined" 
@@ -200,7 +209,7 @@ const StandUpForm = () => {
                 mb:2
               }}
               multiline 
-              rows={8} 
+              rows={5} 
               id="outlined-basic" 
               label="Please put Today's Goals" 
               variant="outlined" 
@@ -216,7 +225,7 @@ const StandUpForm = () => {
                 mb:2
               }}
               multiline 
-              rows={8} 
+              rows={5} 
               id="outlined-basic" 
               label="Please put Challenges Faced" 
               variant="outlined" 
@@ -232,7 +241,7 @@ const StandUpForm = () => {
           <Grid item md={7} sm={12}>
           <Slider name="blocker" defaultValue={0} step={1} min={0} max={5} aria-label="Default" valueLabelDisplay="auto" value={formValues.blocker} onChange={handleInputChange}/>
           </Grid>
-          <Grid container md={11} sm={12}>
+          <Grid container md={11} sm={12} alignContent="center" justifyContent="center">
             <Grid item>
             <Button sx={{m: 2}} variant="contained" onClick={setRowValues}>Submit</Button>
             <Button sx={{m: 2}} variant="contained" onClick={handleReset}>Reset</Button>
