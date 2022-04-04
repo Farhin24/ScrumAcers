@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { Loader } from "react-loader-overlay";
+import { Grid } from "@mui/material";
 
 class Announcement extends React.Component {
   constructor() {
@@ -185,11 +186,12 @@ class Announcement extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <Grid container alignItems="center" justifyContent="center">
         <Loader active={this.state.isLoading} />
+        <Grid item sm={10} md={8} sx={{m:2}}>
         <Box
           sx={{
-            width: "70%",
-            ml: "15%",
+            
             mt: 3,
             bgcolor: "background.paper",
             boxShadow: 1,
@@ -299,8 +301,10 @@ class Announcement extends React.Component {
           </div>
           <ToastContainer />
         </Box>
+        </Grid>
         <br />
         <br />
+        </Grid>
       </React.Fragment>
     );
   }

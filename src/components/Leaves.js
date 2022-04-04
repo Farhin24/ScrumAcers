@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Grid, TextField } from "@material-ui/core";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import EmptyState from "../images/empty_state.png";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -406,6 +407,8 @@ class Leaves extends React.Component {
             sx={{flexWrap: 'wrap'}}
             textColor="primary"
             indicatorColor="primary"
+            variant="scrollable"
+            scrollButtons="auto"
             value={this.state.value}
             onChange={this.handleChange}
             aria-label=""
@@ -432,8 +435,15 @@ class Leaves extends React.Component {
           </Tabs>
         </Box>
         <TabPanel value={this.state.value} index={0} loader={true}>
-          {this.state.errorMessage !== "" ? (
-            this.state.errorMessage
+          {this.state.errorMessage !== "" ? (            
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item md={11}>
+                <img src={EmptyState} style={{ width: "50%" }} alt="Empty" />
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">{this.state.errorMessage}</Typography>
+              </Grid>
+            </Grid>
           ) : (
             <Grid>
               <Paper elevation={15} style={this.newpaperstyle}>
@@ -585,7 +595,14 @@ class Leaves extends React.Component {
               </Table>
             </TableContainer>
           ) : (
-            this.state.errorMessage
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item md={11}>
+                <img src={EmptyState} style={{ width: "50%" }}  alt="Empty"/>
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">{this.state.errorMessage}</Typography>
+              </Grid>
+            </Grid>
           )}
         </TabPanel>
         <TabPanel value={this.state.value} index={2} loader={true}>
@@ -671,7 +688,14 @@ class Leaves extends React.Component {
               </Table>
             </TableContainer>
           ) : (
-            this.state.errorMessage
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item md={11}>
+                <img src={EmptyState} style={{ width: "50%" }}  alt="Empty"/>
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">{this.state.errorMessage}</Typography>
+              </Grid>
+            </Grid>
           )}
         </TabPanel>
         <ToastContainer />
