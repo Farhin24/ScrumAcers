@@ -480,7 +480,6 @@ class SurveyFormManager extends React.Component {
                         <CardActions>
                           <Button
                             size="small"
-                            name="view_responses"
                             onClick={() => this.handleOpen(survey)}
                           >
                             View Responses
@@ -565,7 +564,6 @@ class SurveyFormManager extends React.Component {
                         <Button
                           sx={{ mt: 2 }}
                           variant="contained"
-                          name="close"
                           onClick={this.handleClose}
                         >
                           Close

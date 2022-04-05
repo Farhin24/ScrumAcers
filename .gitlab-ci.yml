@@ -22,4 +22,4 @@ frontend-test:
     - development
   script: 
     - npm install
-    - npx cypress run
+    - npm test
