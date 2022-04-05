@@ -7,11 +7,12 @@ import { connect } from "react-redux";
 import { login } from "../action";
 import { Loader } from "react-loader-overlay";
 import { ToastContainer, toast } from "react-toastify";
+import { Tooltip } from "@material-ui/core";
 
 const Loginform = (props) => {
   const newpaperstyle = {
     margin: "30px auto",
-    width: 400,
+    width: 500,
     padding: "20px 20px",
   };
   const h2style = { margin: 0 };
@@ -182,13 +183,14 @@ const Loginform = (props) => {
             onChange={changevalue}
           />
           <p style={pstyle}>{ferrors.password}</p>
-
+          <br/>
+          
           <div className="text-start" onClick={forgetPassword}>
-            <small className="form-text fw-bold">
-              <Button>Forgot Password?</Button>
+            <small className="form-text fw-bold"><Tooltip title="Enter your Email">
+              <Button variant="contained" size="small">Forgot Password? </Button></Tooltip>
             </small>
           </div>
-
+          <br/>
           <Button style={buttonstyle} type="submit" color="primary" variant="contained">
             Submit
           </Button>
