@@ -44,10 +44,9 @@ class Header extends React.Component {
       }
     }).then((res)=>{
       
-      console.log(res)
     }).catch((err) => {
       
-      console.log(err)
+    
     })  
     localStorage.clear();
     this.props.changeStatus();
