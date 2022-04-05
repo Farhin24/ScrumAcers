@@ -10,7 +10,12 @@ class ChangePasswordForm extends React.Component{
     super();
     this.state = { 
       old_password:"",
-      new_password:""
+      new_password:"",
+      confirm_password:"",
+      error: {
+        new_password:"",
+        confirm_password:""
+      }
     };
   }
 
@@ -85,9 +90,26 @@ class ChangePasswordForm extends React.Component{
     this.setState({ emp_type: emptype, emp_id: empid });
   }
 
-   handlechange = (event) => {
+  handlechange = (event) => {
+    this.validateField(event.target.name,event.target.value)
     this.setState({[event.target.name]:event.target.value})
-   }
+  }
+
+  validateField=(name,value)=>{
+    let error=this.state.error;
+    switch(name){
+      case "new_password": if(value.length<8){error.new_password="Password length should be atleast 8"}
+                           else if(value!==this.state.confirm_password){error.confirm_password="Password doesn't match";error.new_password="";}
+                           else if(value===this.state.confirm_password){error.confirm_password="";error.new_password="";}
+                           else{error.new_password=""}
+                           break;
+      case "confirm_password": if(value!==this.state.new_password){error.confirm_password="Password doesn't match"}
+                               else{error.confirm_password=""}
+                               break;                           
+      default: break;
+    }
+    this.setState({error:error})
+  }
   
   render(){
   
@@ -101,7 +123,7 @@ class ChangePasswordForm extends React.Component{
     <Grid>
     <Paper elevation={15} style={newpaperstyle}>
       <form onSubmit={this.changepassword}>
-        <h5>Enter the following fields!</h5>
+        <h5>Change Password</h5>
         <hr/>
         <TextField
          fullWidth
@@ -112,16 +134,27 @@ class ChangePasswordForm extends React.Component{
          style={{marginTop:"5%"}}
          value={this.state.old_password}
          />
-            <TextField
-         fullWidth
-         type="password"
-         name="new_password"
-         label="New Password"
-         onChange={this.handlechange}
-         style={{marginTop:"5%"}}
-         value={this.state.new_password}
-         />
-         <Button style={{marginTop:"5%"}}  type="submit" variant="contained">
+        <TextField
+          fullWidth
+          type="password"
+          name="new_password"
+          label="New Password"
+          onChange={this.handlechange}
+          style={{marginTop:"5%"}}
+          value={this.state.new_password}
+          />
+        {this.state.error.new_password?<p style={{color:"red"}} className="text-start mt-1">{this.state.error.new_password}</p>:""}
+        <TextField
+          fullWidth
+          type="password"
+          name="confirm_password"
+          label="Confirm Password"
+          onChange={this.handlechange}
+          style={{marginTop:"5%"}}
+          value={this.state.confirm_password}
+          />
+        {this.state.error.confirm_password?<p style={{color:"red"}} className="text-start mt-1">{this.state.error.confirm_password}</p>:""}
+         <Button style={{marginTop:"5%"}}  type="submit" color="primary" variant="contained" disabled={this.state.old_password==="" || this.state.new_password==="" || this.state.confirm_password==="" || this.state.new_password!==this.state.confirm_password || this.state.error.new_password!=="" || this.state.error.confirm_password!==""}>
             Submit
           </Button>
       </form>
