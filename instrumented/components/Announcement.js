@@ -246,6 +246,7 @@ class Announcement extends React.Component {
                 >
                   <button
                     type="submit"
+                    name="submit"
                     disabled={this.state.emp_type < 5 ? false : true}
                     className="btn btn-block btn-primary mt-5"
                   >

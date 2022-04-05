@@ -121,7 +121,7 @@ const style = {
         {formData.map(reviews => (
             
           <Grid item sx={{ ml:2 ,mt:2, mb:2}} alignItems="center" key={reviews.form_id} md={10} sm={10}>
-            <Button key= {reviews.form_id} x={{minWidth:"70%"}} className="modal_shade" variant="contained" onClick={() => {modal_data_update(reviews);handleOpen(reviews.blocker);}}>{reviews.first_name} {reviews.last_name} review</Button>
+            <Button key= {reviews.form_id} sx={{minWidth:"70%"}} className="modal_shade" variant="contained" onClick={() => {modal_data_update(reviews);handleOpen(reviews.blocker);}}>{reviews.first_name} {reviews.last_name} review</Button>
           </Grid>
         ))}
         <Modal
