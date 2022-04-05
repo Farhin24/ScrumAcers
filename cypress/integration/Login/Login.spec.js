@@ -1,7 +1,7 @@
 
 describe("login_employee",() => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/')
+        cy.visit('http://scrum-acers-frontend.herokuapp.com/')
     })
     it("login for Junior Teammate",() => {
     cy.get('input[name="email"]').type("emmabryan@gmail.com")
@@ -20,7 +20,7 @@ describe("login_employee",() => {
 
 describe("login_manager",() => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/')
+        cy.visit('http://scrum-acers-frontend.herokuapp.com/')
     })
     it("login for Senior Teammate",() => {
     cy.get('input[name="email"]').type("robertyen@gmail.com")

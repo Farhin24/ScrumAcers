@@ -1,42 +1,46 @@
 
-describe("Stand_Up_Form_Employee",() =>{  
+describe("Stand_Up_Form_Employee Test Suite",() =>{  
 
     it("Check Route StandUpForm",()=>{
         cy.login_employee()
-        cy.visit("http://localhost:3000/StandUpFormParent")
+        cy.visit("http://scrum-acers-frontend.herokuapp.com/StandUpFormParent")
         expect(cy.findByText(/Stand-Up Form/i))
     })
     
     it("Check Form Status", () =>{
-        if(cy.findByText(/Daily Stand-Up Form/i))
+        cy.login_employee()
+        cy.visit("http://scrum-acers-frontend.herokuapp.com/StandUpFormParent")
+        
+        if(cy.findByText(/Scrum Form/i))
+    {
+        it("Test StandUpForm Submitted",()=>{
+            cy.login_employee()
+            cy.visit("http://scrum-acers-frontend.herokuapp.com/StandUpFormParent")
+            expect(cy.findByText(/Scrum Form/i))
+        })
+    }
+    else
     {
         it("Test StandUpForm",()=>{
             cy.login_employee()
-            cy.visit("http://localhost:3000/StandUpFormParent")
+            cy.visit("http://scrum-acers-frontend.herokuapp.com/StandUpFormParent")
             cy.get('textarea[name="q1"]').type("test")
             cy.get('textarea[name="q2"]').type("test")
             cy.get('textarea[name="q3"]').type("test")
             expect(true).to.equal(true)
         })
-    }
-    else
-    {
-        it("Test StandUpForm Submitted",()=>{
+        it("Check Reset StandUpForm",()=>{
             cy.login_employee()
-            cy.visit("http://localhost:3000/StandUpFormParent")
-            expect(cy.findByText(/Scrum Form/i))
+            cy.visit("http://scrum-acers-frontend.herokuapp.com/StandUpFormParent")
+            cy.get('textarea[name="q1"]').type("test")
+            cy.get('textarea[name="q2"]').type("test")
+            cy.get('textarea[name="q3"]').type("test")
+            cy.findByText(/Reset/i).click()
+            cy.get('textarea').should('be.empty')
         })
     }
     })
     
-    it("Check Reset StandUpForm",()=>{
-        cy.login_employee()
-        cy.visit("http://localhost:3000/StandUpFormParent")
-        cy.get('textarea[name="q1"]').type("test")
-        cy.get('textarea[name="q2"]').type("test")
-        cy.get('textarea[name="q3"]').type("test")
-        cy.findByText(/Reset/i).click()
-        cy.get('textarea').should('be.empty')
-    })
+    
 
 })

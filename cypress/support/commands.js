@@ -26,14 +26,14 @@ import '@testing-library/cypress/add-commands';
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add('login_employee', (text) => {
-        cy.visit('http://localhost:3000/')
+        cy.visit('http://scrum-acers-frontend.herokuapp.com/')
         cy.get('input[name="email"]').type("emmabryan@gmail.com")
         cy.get('input[name="password"]').type("emmabryan5")
         cy.findByText(/submit/i).click()
         cy.wait(5000)
   })
 Cypress.Commands.add('login_manager', (text) => {
-    cy.visit('http://localhost:3000/')
+    cy.visit('http://scrum-acers-frontend.herokuapp.com/')
     cy.get('input[name="email"]').type("robertyen@gmail.com")
     cy.get('input[name="password"]').type("robertyen4")
     cy.findByText(/submit/i).click()

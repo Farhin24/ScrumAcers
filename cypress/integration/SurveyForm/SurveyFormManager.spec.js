@@ -1,14 +1,14 @@
-describe("Stand_Up_Form_Employee",() =>{  
+describe("Survey_Form_Manager Test Suite",() =>{  
 
     it("Check Route StandUpForm",()=>{
         cy.login_manager()
-        cy.visit("http://localhost:3000/SurveyFormParent")
+        cy.visit("http://scrum-acers-frontend.herokuapp.com/SurveyFormParent")
         expect(cy.findByText(/Survey Creation Form/i))
     })
     
     it("Check Form Status", () =>{
             cy.login_manager()
-            cy.visit("http://localhost:3000/SurveyFormParent")
+            cy.visit("http://scrum-acers-frontend.herokuapp.com/SurveyFormParent")
             cy.get('input[name="survey_title"]').type("test")
             cy.get('input[name="question1"]').type("test")
             cy.get('input[name="question2"]').type("test")
@@ -18,16 +18,16 @@ describe("Stand_Up_Form_Employee",() =>{
 
     it("Check Responses",()=>{
         cy.login_manager()
-        cy.visit("http://localhost:3000/SurveyFormParent")
+        cy.visit("http://scrum-acers-frontend.herokuapp.com/SurveyFormParent")
         cy.findByText("View Survey Form List").click()
-        cy.get('button[name="view_responses"]')
+        cy.get('.css-1rtnrqa').first().click()
     })
 
     it("Check Responses Close",()=>{
         cy.login_manager()
-        cy.visit("http://localhost:3000/SurveyFormParent")
+        cy.visit("http://scrum-acers-frontend.herokuapp.com/SurveyFormParent")
         cy.findByText("View Survey Form List").click()
-        cy.get('button[name="view_responses"]').first().click()
-        cy.get('button[name="close"]').click()
+        cy.get('.css-1rtnrqa').first().click()
+        cy.get('.css-zajg55').click()
     })
 })

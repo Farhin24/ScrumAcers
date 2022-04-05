@@ -74,5 +74,6 @@
   },
   "nyc": {
     "report-dir": "cypress-coverage"
-  }
+  },
+  "plugins": ["istanbul"]
 }
