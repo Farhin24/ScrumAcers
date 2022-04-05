@@ -4,7 +4,6 @@ describe("Stand_Up_Form_Employee Test Suite",() =>{
     it("Check Route StandUpForm",()=>{
         cy.login_employee()
         cy.visit("http://scrum-acers-frontend.herokuapp.com/StandUpFormParent")
-        expect(cy.findByText(/Stand-Up Form/i))
     })
     
     it("Check Form Status", () =>{
