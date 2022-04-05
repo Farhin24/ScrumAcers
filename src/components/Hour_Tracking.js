@@ -34,11 +34,10 @@ function Hour_Tracking() {
           }
         )
         .then((res) => {
-          console.log(JSON.stringify(res.data));
           setHoursData(res.data.data)
         })
         .catch((err) => {
-          console.log({ errorMessage: err.response.data.message });
+
         });
     }
     return (

@@ -29,14 +29,12 @@ const ManageBadgeView = () => {
       setBooleanErr(false)
     }
     useEffect(() =>{
-    console.log("inside effect")
       getRowValues();
     },[]);
 
       const UpdateBadges = (post_update) =>{
         let userData=JSON.parse(localStorage.getItem("LoginData"));
         let token = "Bearer " + userData.token;
-        console.log(post_update)
         axios.put(
           "https://scrum-acers-backend.herokuapp.com/api/user/update-employee-badges",
           post_update,
@@ -46,11 +44,9 @@ const ManageBadgeView = () => {
             }
           }
         ).then((res)=>{
-          console.log(res)
           getRowValues()
           handleOpenSnackbar()
         }).catch((err)=>{
-          console.log(err.response)
         })
       }
 
@@ -69,7 +65,6 @@ const ManageBadgeView = () => {
           }
         }     
         })
-        console.log(badge_json_processed)
         delete badge_json_processed["Badges"];
         badge_json_processed.forEach(employee => {
           if(badge.emp_id === employee.emp_id){
@@ -89,14 +84,12 @@ const ManageBadgeView = () => {
            post_update.badge_id.push(badge.badge_id)
          }
        })
-         console.log(post_update)
           UpdateBadges(post_update) 
        
   }
 
     const getRowValues = () => {
       let badge_json_temp = []
-      console.log("get rows called")
       let userData=JSON.parse(localStorage.getItem("LoginData"));
       let token = "Bearer " + userData.token;
       let json = [{}]
@@ -110,7 +103,6 @@ const ManageBadgeView = () => {
               }
             )
             .then((res) => { 
-              console.log(res.data);
                 res.data.forEach(selected_badge => {
                   json = {}
                   json.emp_id = {}
@@ -135,12 +127,11 @@ const ManageBadgeView = () => {
                   json["Badges"] = badges
                   badge_json_temp.push(json)
                 })
-                console.log(badge_json_temp)
                 setBadgeJSON(badge_json_temp)
                 //setBadgeJSONProcessed(badge_json_temp)
             })
             .catch((err) => {
-              console.log({ errorMessage: err.response.data.message });
+             
             });
   
     };
