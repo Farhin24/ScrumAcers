@@ -12,7 +12,7 @@ const StandUpFormParent = () => {
     },[])
     return ( 
         <div>
-            {console.log(emp_type)}
+            
             {
                 
                 emp_type<5? <StandUpFormView/>:<StandUpForm/>

@@ -34,11 +34,10 @@ function Hour_Tracking() {
           }
         )
         .then((res) => {
-          console.log(JSON.stringify(res.data));
           setHoursData(res.data.data)
         })
         .catch((err) => {
-          console.log({ errorMessage: err.response.data.message });
+
         });
     }
     return (
@@ -60,7 +59,7 @@ function Hour_Tracking() {
                 return(
                     <Grid item>
                     <div>
-                                            <Accordion>
+                                            <Accordion className='text-start ml-5'>
                                                 <AccordionSummary
                                                   expandIcon={<ExpandMoreIcon />}
                                                   aria-controls="panel1a-content"
