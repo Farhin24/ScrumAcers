@@ -60,7 +60,7 @@ function Hour_Tracking() {
                 return(
                     <Grid item>
                     <div>
-                                            <Accordion>
+                                            <Accordion className='text-start ml-5'>
                                                 <AccordionSummary
                                                   expandIcon={<ExpandMoreIcon />}
                                                   aria-controls="panel1a-content"
