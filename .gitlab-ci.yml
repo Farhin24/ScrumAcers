@@ -3,6 +3,8 @@ image: node:latest
 stages:
   - frontend-build
   - frontend-test
+  - frontend-build-main
+  - frontend-test-main
 
 frontend-build:
   type: deploy
@@ -23,3 +25,24 @@ frontend-test:
   script: 
     - npm install
     - npm test
+
+frontend-build-main:
+  type: deploy
+  stage: frontend-build
+  image: ruby:latest
+  only:
+    - main
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_APP_FRONTEND --api-key=$HEROKU_API_KEY
+
+frontend-test-main:
+  stage: frontend-test
+  only:
+    - main
+  script: 
+    - npm install
+    - npm test
+

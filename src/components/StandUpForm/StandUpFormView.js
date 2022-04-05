@@ -34,12 +34,10 @@ const style = {
     const [opensnackbar, setOpenSnack] = React.useState(false);
     const [modal_data,setModaldata] = React.useState({creation_timestamp:""});
     const handleOpen = (blockers) => {
-      console.log(blockers)
       if(blockers > 0 ){
 
         handleOpenSnackbar();
         setOpen(true)
-        console.log(opensnackbar)
       }
       setOpen(true)
       
@@ -50,9 +48,7 @@ const style = {
       handleCloseSnackBar();
     };
     const handleCloseSnackBar = () => setOpenSnack(false)
-    //console.log("props data",this.props.data);
     function modal_data_update(reviews){
-      console.log(reviews)
       setModaldata(reviews)
     }
     const[formData,setFormData] = React.useState([]);
@@ -72,15 +68,12 @@ const style = {
               }
             )
             .then((res) => {
-              console.log({ rows: res.data.data });
-              console.log(res.data)
               if(res.data.data.length>0){
                   setFormData(res.data.data);
               }
               
             })
             .catch((err) => {
-              console.log({ errorMessage: err.response.data.message });
             });
     };
 

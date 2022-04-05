@@ -98,7 +98,6 @@ const StandUpForm = () => {
     let data = {
        ...formValues
     };
-    console.log(data)
     if(data.q1 !== "" || data.q2 !== "" || data.q3 !== "" ){
       let token = "Bearer " + userData.token;
         axios

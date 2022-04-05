@@ -278,7 +278,6 @@ class Leaves extends React.Component {
         }
       )
       .then((res) => {
-        console.log(res);
         toast.success("Request Sent!", {
           position: toast.POSITION.BOTTOM_CENTER,
         });
