@@ -153,8 +153,6 @@ const Loginform = (props) => {
     });
   };
 
-  // const dispatch = useDispatch();
-
   return (
     <Grid>
       <Loader active={isLoading} />
@@ -187,10 +185,9 @@ const Loginform = (props) => {
           
           <div className="text-start" onClick={forgetPassword}>
             <small className="form-text fw-bold"><Tooltip title="Enter your Email">
-              <Button variant="contained" size="small">Forgot Password? </Button></Tooltip>
+              <Button size="small">Forgot Password? </Button></Tooltip>
             </small>
           </div>
-          <br/>
           <Button style={buttonstyle} type="submit" color="primary" variant="contained">
             Submit
           </Button>
