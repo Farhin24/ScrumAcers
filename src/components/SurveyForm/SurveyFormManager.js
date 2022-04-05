@@ -107,8 +107,7 @@ class SurveyFormManager extends React.Component {
     let error = "";
     if (err.response) {
       this.setState({
-        errorMessage: err.response.data.message,
-        surveyFormsList: [],
+        errorMessage: err.response.data.message
       });
       if (
         err.response.data.message === "Invalid Token..." ||
@@ -307,7 +306,7 @@ class SurveyFormManager extends React.Component {
           this.setState({ surveyResponseList: res.data.data,open:true});
         }
         else{
-          let err={}
+          let err={response:{data:{message:""}}}
           err.response.data.message="No one has filled the survey yet"
           this.invalidLoginHandler(err)
         }
