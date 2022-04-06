@@ -4,9 +4,15 @@
 /node_modules
 /.pnp
 .pnp.js
+.idea
 
 # testing
 /coverage
+/cypress/videos
+/cypress/screenshots
+cypress-coverage
+.nyc_output
+instrumented
 
 # production
 /build
