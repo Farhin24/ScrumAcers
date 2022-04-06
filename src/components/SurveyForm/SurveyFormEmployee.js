@@ -325,7 +325,7 @@ class SurveyFormEmployee extends React.Component {
                             component="div"
                             onClick={() => this.handleOpen(survey)}
                           >
-                            <Button sizeLarge sx={{ p: 0 }}>
+                            <Button name="title" sizeLarge sx={{ p: 0 }}>
                               {survey.survey_title}
                             </Button>
                           </Typography>

@@ -8,6 +8,11 @@
 
 # testing
 /coverage
+/cypress/videos
+/cypress/screenshots
+cypress-coverage
+.nyc_output
+instrumented
 
 # production
 /build
