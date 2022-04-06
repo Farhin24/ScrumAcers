@@ -24,8 +24,9 @@ frontend-test:
   only:
     - development
   script: 
-    - apt-get install -y yum
-    - yum install xorg-x11-server-Xvfb
+    - apt update
+    - apt-get update
+    - apt-get install -y xvfb
     - npm install
     - npm test
 
@@ -47,8 +48,9 @@ frontend-test-main:
   only:
     - main
   script: 
-    - apt-get install -y yum
-    - yum install xorg-x11-server-Xvfb
+    - apt update
+    - apt-get update
+    - apt-get install -y xvfb
     - npm install
     - npm test
 
