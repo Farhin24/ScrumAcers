@@ -10,8 +10,9 @@
 /coverage
 /cypress/videos
 /cypress/screenshots
-cypress-coverage/lcov-report
-
+cypress-coverage
+.nyc_output
+instrumented
 
 # production
 /build
